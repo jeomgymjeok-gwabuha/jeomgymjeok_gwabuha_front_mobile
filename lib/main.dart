@@ -1,18 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:jeomgymjeok_gwabuha/screens/home.dart';
+import 'package:jeomgymjeok_gwabuha/screens/app.dart';
 
 void main() {
-  runApp(const App());
+  runApp(const Main());
 }
 
-class App extends StatelessWidget {
-  const App({super.key});
+class Main extends StatelessWidget {
+  const Main({super.key});
 
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
     return const MaterialApp(
-      home: HomeScreen(),
+      home: AppScreen(),
     );
   }
 }
