@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:jeomgymjeok_gwabuha/design/Pallete.dart';
+import 'package:jeomgymjeok_gwabuha/design/Types.dart';
 
 class BottomNavigation extends StatelessWidget {
   const BottomNavigation({
@@ -24,16 +25,8 @@ class BottomNavigation extends StatelessWidget {
         currentIndex: pageIndex,
         selectedItemColor: pallete[Pallete.flash],
         unselectedItemColor: pallete[Pallete.white],
-        selectedLabelStyle: const TextStyle(
-          fontSize: 12,
-          fontWeight: FontWeight.normal,
-          height: 2,
-        ),
-        unselectedLabelStyle: const TextStyle(
-          fontSize: 12,
-          fontWeight: FontWeight.normal,
-          height: 2,
-        ),
+        selectedLabelStyle: types[Types.regular_sm],
+        unselectedLabelStyle: types[Types.regular_sm],
         items: [
           BottomNavigationBarItem(
             icon: SvgPicture.asset('assets/icons/calendar.svg',
