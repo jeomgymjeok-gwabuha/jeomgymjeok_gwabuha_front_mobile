@@ -1,6 +1,7 @@
-import 'dart:io';
+import 'package:flutter/services.dart';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:jeomgymjeok_gwabuha/design/Pallete.dart';
 import 'package:jeomgymjeok_gwabuha/screens/calender.dart';
@@ -37,9 +38,12 @@ class _AppScreenState extends State<AppScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Hello, world'),
+        toolbarHeight: 56,
+        centerTitle: true,
+        backgroundColor: pallete[Pallete.deepNavy],
+        title: Image.asset('assets/images/appbar_logo.png'),
       ),
-      body: activePage,
+      body: SafeArea(child: activePage),
       bottomNavigationBar: BottomNavigation(
         pageIndex: _selectedPageIndex,
         onSelectPage: _selectPage,
