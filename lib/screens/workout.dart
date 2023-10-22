@@ -1,12 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:jeomgymjeok_gwabuha/data/dummy_workout_list.dart';
+import 'package:jeomgymjeok_gwabuha/models/m_workout_item.dart';
+import 'package:jeomgymjeok_gwabuha/widgets/workout_list.dart';
 
 class WorkoutScreen extends StatelessWidget {
   const WorkoutScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return const Center(
-      child: Text('운동 기록'),
+    final List<MWorkoutItem> workoutList = dummyWorkoutList;
+
+    return WorkoutList(
+      list: workoutList,
     );
   }
 }
