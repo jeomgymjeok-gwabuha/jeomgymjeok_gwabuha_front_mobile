@@ -1,12 +1,8 @@
-import 'package:flutter/services.dart';
-
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:jeomgymjeok_gwabuha/design/Pallete.dart';
 import 'package:jeomgymjeok_gwabuha/screens/calender.dart';
 import 'package:jeomgymjeok_gwabuha/screens/workout.dart';
-import 'package:jeomgymjeok_gwabuha/widgets/BottomNavigation.dart';
+import 'package:jeomgymjeok_gwabuha/widgets/bottom_navigation.dart';
 
 enum ScreenType { calendar, workout }
 
