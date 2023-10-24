@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:jeomgymjeok_gwabuha/design/Pallete.dart';
 import 'package:jeomgymjeok_gwabuha/design/Types.dart';
+import 'package:jeomgymjeok_gwabuha/widgets/workout_item/workout_item_delete_gesture.dart';
 
 class WorkoutItemHeader extends StatefulWidget {
   const WorkoutItemHeader({
@@ -120,32 +121,8 @@ class _WorkoutItemHeaderState extends State<WorkoutItemHeader> {
           Positioned(
             right: 0,
             bottom: 0,
-            child: GestureDetector(
-              onHorizontalDragUpdate: (details) {
-                if (details.delta.dx < 0) {
-                  setState(() {
-                    buttonWidth = min(
-                        buttonWidth - (details.primaryDelta! * 2), fullWidth);
-                  });
-                }
-              },
-              onHorizontalDragEnd: (details) {
-                if (buttonWidth > fullWidth * 0.7) {
-                  // To display notification to question delete
-                }
-              },
-              child: AnimatedContainer(
-                duration: const Duration(milliseconds: 150),
-                curve: Curves.easeInOut,
-                width: isDisplayDeleteButton ? buttonWidth : 0,
-                height: 80,
-                color: pallete[Pallete.red02],
-                alignment: Alignment.centerLeft,
-                child: Padding(
-                  padding: const EdgeInsets.all(28.0),
-                  child: SvgPicture.asset('assets/icons/white_trash.svg'),
-                ),
-              ),
+            child: WorkoutItemDeleteGesture(
+              hidden: isDisplayDeleteButton,
             ),
           )
         ],
