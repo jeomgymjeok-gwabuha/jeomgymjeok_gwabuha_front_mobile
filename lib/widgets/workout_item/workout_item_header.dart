@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:jeomgymjeok_gwabuha/design/Pallete.dart';
@@ -24,6 +26,7 @@ class WorkoutItemHeader extends StatefulWidget {
 class _WorkoutItemHeaderState extends State<WorkoutItemHeader> {
   bool isDisplayDeleteButton = false;
   String direction = '';
+  double buttonWidth = 80;
 
   @override
   Widget build(BuildContext context) {
@@ -31,7 +34,7 @@ class _WorkoutItemHeaderState extends State<WorkoutItemHeader> {
     final double contentWidth =
         isDisplayDeleteButton ? fullWidth - 80 : fullWidth;
 
-    return Container(
+    return SizedBox(
       width: fullWidth,
       height: 80,
       child: Stack(
@@ -117,15 +120,31 @@ class _WorkoutItemHeaderState extends State<WorkoutItemHeader> {
           Positioned(
             right: 0,
             bottom: 0,
-            child: AnimatedContainer(
-              duration: const Duration(milliseconds: 150),
-              curve: Curves.easeInOut,
-              width: isDisplayDeleteButton ? 80 : 0,
-              height: 80,
-              color: pallete[Pallete.red02],
-              child: IconButton(
-                icon: SvgPicture.asset('assets/icons/white_trash.svg'),
-                onPressed: () {},
+            child: GestureDetector(
+              onHorizontalDragUpdate: (details) {
+                if (details.delta.dx < 0) {
+                  setState(() {
+                    buttonWidth = min(
+                        buttonWidth - (details.primaryDelta! * 2), fullWidth);
+                  });
+                }
+              },
+              onHorizontalDragEnd: (details) {
+                if (buttonWidth > fullWidth * 0.7) {
+                  // To display notification to question delete
+                }
+              },
+              child: AnimatedContainer(
+                duration: const Duration(milliseconds: 150),
+                curve: Curves.easeInOut,
+                width: isDisplayDeleteButton ? buttonWidth : 0,
+                height: 80,
+                color: pallete[Pallete.red02],
+                alignment: Alignment.centerLeft,
+                child: Padding(
+                  padding: const EdgeInsets.all(28.0),
+                  child: SvgPicture.asset('assets/icons/white_trash.svg'),
+                ),
               ),
             ),
           )
