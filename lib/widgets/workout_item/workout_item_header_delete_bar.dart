@@ -4,8 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:jeomgymjeok_gwabuha/design/Pallete.dart';
 
-class WorkoutItemDeleteGesture extends StatefulWidget {
-  const WorkoutItemDeleteGesture({
+class WorkoutItemHeaderDeleteBar extends StatefulWidget {
+  const WorkoutItemHeaderDeleteBar({
     super.key,
     required this.hidden,
   });
@@ -13,11 +13,12 @@ class WorkoutItemDeleteGesture extends StatefulWidget {
   final bool hidden;
 
   @override
-  State<WorkoutItemDeleteGesture> createState() =>
-      _WorkoutItemDeleteGestureState();
+  State<WorkoutItemHeaderDeleteBar> createState() =>
+      _WorkoutItemHeaderDeleteBarState();
 }
 
-class _WorkoutItemDeleteGestureState extends State<WorkoutItemDeleteGesture> {
+class _WorkoutItemHeaderDeleteBarState
+    extends State<WorkoutItemHeaderDeleteBar> {
   double buttonWidth = 80;
 
   @override
