@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:jeomgymjeok_gwabuha/design/Pallete.dart';
 import 'package:jeomgymjeok_gwabuha/screens/calender.dart';
-import 'package:jeomgymjeok_gwabuha/screens/workout.dart';
+import 'package:jeomgymjeok_gwabuha/screens/graph.dart';
 import 'package:jeomgymjeok_gwabuha/widgets/bottom_navigation.dart';
 
 enum ScreenType { calendar, workout }
@@ -29,7 +29,7 @@ class _AppScreenState extends State<AppScreen> {
     Widget activePage = const CalendarScreen();
 
     if (_selectedPageIndex == ScreenType.workout.index) {
-      activePage = const WorkoutScreen();
+      activePage = const GraphScreen();
     }
 
     return Scaffold(
