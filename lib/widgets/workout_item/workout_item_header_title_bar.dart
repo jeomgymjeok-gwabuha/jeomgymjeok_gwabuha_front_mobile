@@ -44,7 +44,7 @@ class _WorkoutItemHeaderTitleBarState extends State<WorkoutItemHeaderTitleBar> {
     }
 
     void _onHorizontalDragEnd(DragEndDetails details) {
-      widget.toggleDeleteBar(direction == 'right');
+      widget.toggleDeleteBar(direction == 'left');
     }
 
     return GestureDetector(
