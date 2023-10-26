@@ -55,6 +55,7 @@ class _WorkoutItemHeaderState extends State<WorkoutItemHeader> {
             bottom: 0,
             child: WorkoutItemHeaderDeleteBar(
               hidden: isDisplayDeleteButton,
+              toggleDeleteBar: _toggleDeleteBar,
             ),
           )
         ],
