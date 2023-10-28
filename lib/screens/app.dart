@@ -38,6 +38,7 @@ class _AppScreenState extends State<AppScreen> {
         centerTitle: true,
         backgroundColor: pallete[Pallete.deepNavy],
         title: Image.asset('assets/images/appbar_logo.png'),
+        elevation: 0,
       ),
       body: SafeArea(child: activePage),
       bottomNavigationBar: BottomNavigation(
