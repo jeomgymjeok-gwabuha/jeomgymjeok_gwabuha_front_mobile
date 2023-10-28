@@ -3,6 +3,7 @@ import 'package:jeomgymjeok_gwabuha/data/dummy_workout_list.dart';
 import 'package:jeomgymjeok_gwabuha/design/Pallete.dart';
 import 'package:jeomgymjeok_gwabuha/design/Types.dart';
 import 'package:jeomgymjeok_gwabuha/models/m_workout_item.dart';
+import 'package:jeomgymjeok_gwabuha/widgets/calendar.dart';
 import 'package:jeomgymjeok_gwabuha/widgets/workout_list.dart';
 
 class CalendarScreen extends StatelessWidget {
@@ -14,6 +15,7 @@ class CalendarScreen extends StatelessWidget {
 
     return Column(
       children: [
+        Calendar(),
         Container(
           width: double.infinity,
           height: 40,
