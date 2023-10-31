@@ -13,31 +13,35 @@ class CalendarScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final List<MWorkoutItem> workoutList = dummyWorkoutList;
 
-    return Column(
-      children: [
-        Calendar(),
-        Container(
-          width: double.infinity,
-          height: 40,
-          color: pallete[Pallete.deepNavy],
-          alignment: Alignment.centerRight,
-          padding: const EdgeInsets.symmetric(horizontal: 36),
-          child: TextButton(
-            onPressed: () {},
-            child: Text(
-              '편집',
-              style: types[Types.semi_md]!.copyWith(
-                color: pallete[Pallete.white],
+    return Container(
+      height: double.infinity,
+      child: Column(
+        children: [
+          Calendar(),
+          Container(
+            width: double.infinity,
+            height: 40,
+            color: pallete[Pallete.deepNavy],
+            alignment: Alignment.centerRight,
+            padding: const EdgeInsets.symmetric(horizontal: 36),
+            child: TextButton(
+              onPressed: () {},
+              child: Text(
+                '편집',
+                style: types[Types.semi_md]!.copyWith(
+                  color: pallete[Pallete.white],
+                ),
               ),
             ),
           ),
-        ),
-        Expanded(
-          child: WorkoutList(
-            list: workoutList,
+          const SizedBox(height: 4),
+          Expanded(
+            child: WorkoutList(
+              list: workoutList,
+            ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }
