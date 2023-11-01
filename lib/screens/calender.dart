@@ -1,47 +1,63 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:jeomgymjeok_gwabuha/data/dummy_workout_list.dart';
-import 'package:jeomgymjeok_gwabuha/design/Pallete.dart';
-import 'package:jeomgymjeok_gwabuha/design/Types.dart';
+import 'package:intl/intl.dart';
 import 'package:jeomgymjeok_gwabuha/models/m_workout_item.dart';
 import 'package:jeomgymjeok_gwabuha/providers/date_provider.dart';
+import 'package:jeomgymjeok_gwabuha/providers/workout_provider.dart';
 import 'package:jeomgymjeok_gwabuha/widgets/calendar.dart';
 import 'package:jeomgymjeok_gwabuha/widgets/workout_list.dart';
+import 'package:table_calendar/table_calendar.dart';
 
-class CalendarScreen extends ConsumerWidget {
+class CalendarScreen extends ConsumerStatefulWidget {
   const CalendarScreen({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final List<MWorkoutItem> workoutList = dummyWorkoutList;
+  ConsumerState<ConsumerStatefulWidget> createState() {
+    return _CalendarScreenState();
+  }
+}
+
+class _CalendarScreenState extends ConsumerState<CalendarScreen> {
+  CalendarFormat _calendarFormat = CalendarFormat.month;
+  bool isSelectDate = false;
+
+  void _changeYear(int value) {
+    ref.read(dateProvider.notifier).setYear(value);
+  }
+
+  void _selectDay(DateTime selectedDay, DateTime focusedDay) {
+    setState(() {
+      ref.read(dateProvider.notifier).setDate(selectedDay);
+      _calendarFormat = CalendarFormat.week;
+      isSelectDate = true;
+    });
+  }
+
+  get _selectedFormattedDay {
+    return DateFormat('yyyy.MM.dd').format(ref.watch(dateProvider));
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    Map<String, List<MWorkoutItem>> _workout = ref.watch(workoutProvider);
+    DateTime _selectedDay = ref.watch(dateProvider);
 
     return Container(
       height: double.infinity,
-      child: const Column(
+      child: Column(
         children: [
-          Calendar(),
-          // Container(
-          //   width: double.infinity,
-          //   height: 40,
-          //   color: pallete[Pallete.deepNavy],
-          //   alignment: Alignment.centerRight,
-          //   padding: const EdgeInsets.symmetric(horizontal: 36),
-          //   child: TextButton(
-          //     onPressed: () {},
-          //     child: Text(
-          //       '편집',
-          //       style: types[Types.semi_md]!.copyWith(
-          //         color: pallete[Pallete.white],
-          //       ),
-          //     ),
-          //   ),
-          // ),
-          // const SizedBox(height: 4),
-          // Expanded(
-          //   child: WorkoutList(
-          //     list: workoutList,
-          //   ),
-          // ),
+          Calendar(
+            selectedDay: _selectedDay,
+            calendarFormat: _calendarFormat,
+            selectDay: _selectDay,
+            changeYear: _changeYear,
+          ),
+          if (isSelectDate)
+            Expanded(
+              child: WorkoutList(
+                list: _workout[_selectedFormattedDay] ?? [],
+              ),
+            ),
         ],
       ),
     );
