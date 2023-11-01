@@ -10,37 +10,29 @@ class Calendar extends StatefulWidget {
 }
 
 class _CalendarState extends State<Calendar> {
-  List<int> years = [
-    2011,
-    2022,
-    2013,
-    2014,
-    2015,
-    2016,
-    2017,
-    2018,
-    2019,
-    2020,
-    2021,
-    2022,
-    2023,
-    2024,
-    2025,
-    2026,
-    2027,
-    2028
-  ];
+  int _selectedYear = DateTime.now().year;
+
+  void _changeYear(int value) {
+    setState(() {
+      _selectedYear = value;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
-    return const Padding(
-      padding: EdgeInsets.symmetric(
+    return Padding(
+      padding: const EdgeInsets.symmetric(
         vertical: 1,
       ),
       child: Stack(
         children: [
-          WorkoutCalendar(),
-          YearSelector(),
+          const WorkoutCalendar(),
+          YearSelector(
+            value: _selectedYear,
+            start: 2000,
+            end: 2100,
+            changeYear: _changeYear,
+          ),
         ],
       ),
     );

@@ -4,29 +4,43 @@ import 'package:intl/intl.dart';
 import 'package:jeomgymjeok_gwabuha/design/Pallete.dart';
 import 'package:jeomgymjeok_gwabuha/design/Types.dart';
 
-List<int> years = [
-  2011,
-  2022,
-  2013,
-  2014,
-  2015,
-  2016,
-  2017,
-  2018,
-  2019,
-  2020,
-  2021,
-  2022,
-  2023,
-  2024,
-  2025,
-  2026,
-  2027,
-  2028
-];
+class YearSelector extends StatefulWidget {
+  YearSelector({
+    super.key,
+    required this.value,
+    required this.start,
+    required this.end,
+    required this.changeYear,
+  });
 
-class YearSelector extends StatelessWidget {
-  const YearSelector({super.key});
+  final int value;
+  final int start;
+  final int end;
+  void Function(int value) changeYear;
+
+  @override
+  State<YearSelector> createState() => _YearSelectorState();
+}
+
+class _YearSelectorState extends State<YearSelector> {
+  final ScrollController _scrollController = ScrollController();
+  late List<int> years = [];
+
+  @override
+  void initState() {
+    super.initState();
+
+    years = List.generate(
+      widget.end - widget.start + 1,
+      (index) => index + widget.start,
+    );
+
+    WidgetsBinding.instance!.addPostFrameCallback((_) {
+      final foundIndex = years.indexWhere((element) => element == widget.value);
+      final rowCount = (foundIndex ~/ 3).toDouble();
+      _scrollController.jumpTo(52 * rowCount);
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -86,7 +100,7 @@ class YearSelector extends StatelessWidget {
             ),
             Container(
               width: fullWidth,
-              height: 52 * (years.length / 3).toDouble() + 32.0,
+              height: 52 * 6.0 + 32.0,
               color: pallete[Pallete.alaskanBlue],
               padding: const EdgeInsets.symmetric(
                 vertical: 16,
@@ -99,22 +113,29 @@ class YearSelector extends StatelessWidget {
                   crossAxisSpacing: 8,
                   mainAxisSpacing: 0,
                 ),
+                controller: _scrollController,
                 children: [
                   for (final year in years)
                     Padding(
                       padding: const EdgeInsets.all(8.0),
-                      child: Container(
-                        decoration: BoxDecoration(
-                          color: pallete[Pallete.alaskanBlue],
-                          borderRadius: BorderRadius.circular(30),
-                        ),
-                        child: Center(
-                          child: Text(
-                            year.toString(),
-                            style: types[Types.regular_md]!.copyWith(
-                              color: pallete[Pallete.white],
-                            ),
+                      child: TextButton(
+                        onPressed: () {
+                          widget.changeYear(year);
+                        },
+                        style: TextButton.styleFrom(
+                          foregroundColor: year == widget.value
+                              ? pallete[Pallete.deepNavy]
+                              : pallete[Pallete.white],
+                          backgroundColor: year == widget.value
+                              ? pallete[Pallete.flash]
+                              : pallete[Pallete.alaskanBlue],
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(30),
                           ),
+                        ),
+                        child: Text(
+                          '$year',
+                          style: types[Types.regular_md],
                         ),
                       ),
                     ),
