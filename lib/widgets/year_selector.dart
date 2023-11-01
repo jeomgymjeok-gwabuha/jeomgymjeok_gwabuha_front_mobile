@@ -8,13 +8,11 @@ class YearSelector extends StatefulWidget {
   YearSelector({
     super.key,
     required this.selectedDay,
-    required this.value,
     required this.start,
     required this.end,
     required this.changeYear,
   });
 
-  final int value;
   final int start;
   final int end;
   final DateTime selectedDay;
@@ -41,7 +39,7 @@ class _YearSelectorState extends State<YearSelector>
       widget.end - widget.start + 1,
       (index) => index + widget.start,
     );
-    _focusedYear = widget.value;
+    _focusedYear = widget.selectedDay.year;
 
     _animatedcontroller = AnimationController(
       vsync: this,
@@ -82,12 +80,12 @@ class _YearSelectorState extends State<YearSelector>
 
                         if (_openYearSelector) {
                           _animatedcontroller.forward();
-                          final foundIndex = years
-                              .indexWhere((element) => element == widget.value);
+                          final foundIndex = years.indexWhere(
+                              (element) => element == widget.selectedDay.year);
                           final rowCount = (foundIndex ~/ 3).toDouble();
                           _scrollController.jumpTo(52 * rowCount);
                         } else {
-                          _focusedYear = widget.value;
+                          _focusedYear = widget.selectedDay.year;
                           _animatedcontroller.reverse();
                         }
                       },
