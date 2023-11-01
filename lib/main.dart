@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:jeomgymjeok_gwabuha/screens/app.dart';
 import 'package:intl/date_symbol_data_local.dart';
 
@@ -9,7 +10,7 @@ void main() async {
       overlays: [SystemUiOverlay.top]);
   await initializeDateFormatting();
 
-  runApp(const Main());
+  runApp(const ProviderScope(child: Main()));
 }
 
 class Main extends StatelessWidget {
