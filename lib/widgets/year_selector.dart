@@ -7,6 +7,7 @@ import 'package:jeomgymjeok_gwabuha/design/Types.dart';
 class YearSelector extends StatefulWidget {
   YearSelector({
     super.key,
+    required this.selectedDay,
     required this.value,
     required this.start,
     required this.end,
@@ -16,6 +17,7 @@ class YearSelector extends StatefulWidget {
   final int value;
   final int start;
   final int end;
+  final DateTime selectedDay;
   void Function(int value) changeYear;
 
   @override
@@ -116,7 +118,7 @@ class _YearSelectorState extends State<YearSelector>
                 Positioned.fill(
                   child: Center(
                     child: Text(
-                      DateFormat('yyyy.MM.dd').format(DateTime.now()),
+                      DateFormat('yyyy.MM.dd').format(widget.selectedDay),
                       style: types[Types.semi_lg]!.copyWith(
                         color: pallete[Pallete.white],
                       ),

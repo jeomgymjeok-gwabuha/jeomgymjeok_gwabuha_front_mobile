@@ -6,41 +6,38 @@ import 'package:jeomgymjeok_gwabuha/design/Types.dart';
 import 'package:table_calendar/table_calendar.dart';
 
 class WorkoutCalendar extends StatefulWidget {
-  const WorkoutCalendar({super.key});
+  const WorkoutCalendar({
+    super.key,
+    required this.selectedDay,
+    required this.focusdDay,
+    required this.calendarFormat,
+    required this.onDaySelected,
+  });
+
+  final DateTime selectedDay;
+  final DateTime focusdDay;
+  final CalendarFormat calendarFormat;
+  final void Function(DateTime selectedDay, DateTime focusedDay) onDaySelected;
 
   @override
   State<WorkoutCalendar> createState() => _WorkoutCalendarState();
 }
 
 class _WorkoutCalendarState extends State<WorkoutCalendar> {
-  DateTime _focusedDay = DateTime.now();
-  DateTime _selectedDay = DateTime(
-    DateTime.now().year,
-    DateTime.now().month,
-    DateTime.now().day,
-  );
-  CalendarFormat _calendarFormat = CalendarFormat.month;
-
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
     return TableCalendar(
       firstDay: DateTime(1800),
       lastDay: DateTime(3000),
-      focusedDay: _focusedDay,
-      calendarFormat: _calendarFormat,
+      focusedDay: widget.focusdDay,
+      calendarFormat: widget.calendarFormat,
       daysOfWeekHeight: 50,
       rowHeight: 50,
       selectedDayPredicate: (day) {
-        return isSameDay(_selectedDay, day);
+        return isSameDay(widget.selectedDay, day);
       },
-      onDaySelected: (selectedDay, focusedDay) {
-        setState(() {
-          _selectedDay = selectedDay;
-          _focusedDay = focusedDay;
-          _calendarFormat = CalendarFormat.week;
-        });
-      },
+      onDaySelected: widget.onDaySelected,
       headerStyle: HeaderStyle(
         titleCentered: true,
         formatButtonVisible: false,
