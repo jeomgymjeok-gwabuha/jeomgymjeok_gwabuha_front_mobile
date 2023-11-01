@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:jeomgymjeok_gwabuha/providers/date_provider.dart';
+import 'package:jeomgymjeok_gwabuha/design/Pallete.dart';
 import 'package:jeomgymjeok_gwabuha/widgets/workout_calendar.dart';
 import 'package:jeomgymjeok_gwabuha/widgets/year_selector.dart';
 import 'package:table_calendar/table_calendar.dart';
 
-class Calendar extends ConsumerStatefulWidget {
+class Calendar extends StatelessWidget {
   const Calendar({
     super.key,
     required this.selectedDay,
@@ -20,16 +19,7 @@ class Calendar extends ConsumerStatefulWidget {
   final void Function(int value) changeYear;
 
   @override
-  ConsumerState<Calendar> createState() {
-    return _CalendarState();
-  }
-}
-
-class _CalendarState extends ConsumerState<Calendar> {
-  @override
   Widget build(BuildContext context) {
-    DateTime _selectedDay = ref.watch(dateProvider);
-
     return Padding(
       padding: const EdgeInsets.symmetric(
         vertical: 1,
@@ -37,15 +27,15 @@ class _CalendarState extends ConsumerState<Calendar> {
       child: Stack(
         children: [
           WorkoutCalendar(
-            selectedDay: _selectedDay,
-            calendarFormat: widget.calendarFormat,
-            onDaySelected: widget.selectDay,
+            selectedDay: selectedDay,
+            calendarFormat: calendarFormat,
+            onDaySelected: selectDay,
           ),
           YearSelector(
-            selectedDay: _selectedDay,
+            selectedDay: selectedDay,
             start: 2000,
             end: 2100,
-            changeYear: widget.changeYear,
+            changeYear: changeYear,
           ),
         ],
       ),

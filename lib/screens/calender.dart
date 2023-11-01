@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
+import 'package:jeomgymjeok_gwabuha/design/Pallete.dart';
 import 'package:jeomgymjeok_gwabuha/models/m_workout_item.dart';
 import 'package:jeomgymjeok_gwabuha/providers/date_provider.dart';
 import 'package:jeomgymjeok_gwabuha/providers/workout_provider.dart';
@@ -42,7 +43,7 @@ class _CalendarScreenState extends ConsumerState<CalendarScreen> {
     Map<String, List<MWorkoutItem>> _workout = ref.watch(workoutProvider);
     DateTime _selectedDay = ref.watch(dateProvider);
 
-    return Container(
+    return SizedBox(
       height: double.infinity,
       child: Column(
         children: [
@@ -51,6 +52,14 @@ class _CalendarScreenState extends ConsumerState<CalendarScreen> {
             calendarFormat: _calendarFormat,
             selectDay: _selectDay,
             changeYear: _changeYear,
+          ),
+          Container(
+            width: isSelectDate ? double.infinity : 0,
+            height: 4,
+            color: pallete[Pallete.deepNavy],
+            margin: const EdgeInsets.only(
+              bottom: 2,
+            ),
           ),
           if (isSelectDate)
             Expanded(
