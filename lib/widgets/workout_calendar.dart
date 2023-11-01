@@ -9,13 +9,11 @@ class WorkoutCalendar extends StatefulWidget {
   const WorkoutCalendar({
     super.key,
     required this.selectedDay,
-    required this.focusdDay,
     required this.calendarFormat,
     required this.onDaySelected,
   });
 
   final DateTime selectedDay;
-  final DateTime focusdDay;
   final CalendarFormat calendarFormat;
   final void Function(DateTime selectedDay, DateTime focusedDay) onDaySelected;
 
@@ -30,7 +28,7 @@ class _WorkoutCalendarState extends State<WorkoutCalendar> {
     return TableCalendar(
       firstDay: DateTime(1800),
       lastDay: DateTime(3000),
-      focusedDay: widget.focusdDay,
+      focusedDay: widget.selectedDay,
       calendarFormat: widget.calendarFormat,
       daysOfWeekHeight: 50,
       rowHeight: 50,
