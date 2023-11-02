@@ -80,8 +80,8 @@ class _YearSelectorState extends State<YearSelector>
                             },
                           );
 
-                          if (response == null) {
-                            print('끝');
+                          if (response != null && response is int) {
+                            widget.changeYear(response);
                           }
                         },
                         icon: SvgPicture.asset(

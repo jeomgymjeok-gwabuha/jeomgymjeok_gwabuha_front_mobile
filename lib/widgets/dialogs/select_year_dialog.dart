@@ -44,6 +44,13 @@ class _SelectYearDialogState extends State<SelectYearDialog>
       upperBound: 1,
     );
     _animatedcontroller.forward();
+
+    WidgetsBinding.instance!.addPostFrameCallback((_) {
+      final foundIndex =
+          widget.years.indexWhere((element) => element == _focusedYear);
+      final rowCount = (foundIndex ~/ 3).toDouble();
+      _scrollController.jumpTo(52 * rowCount);
+    });
   }
 
   @override
@@ -113,7 +120,9 @@ class _SelectYearDialogState extends State<SelectYearDialog>
                                 padding: const EdgeInsets.all(0),
                                 alignment: Alignment.center,
                               ),
-                              onPressed: () {},
+                              onPressed: () {
+                                Navigator.of(context).pop(_focusedYear);
+                              },
                               child: Text(
                                 '완료',
                                 style: types[Types.semi_lg]!.copyWith(
