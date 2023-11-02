@@ -3,6 +3,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:intl/intl.dart';
 import 'package:jeomgymjeok_gwabuha/design/Pallete.dart';
 import 'package:jeomgymjeok_gwabuha/design/Types.dart';
+import 'package:jeomgymjeok_gwabuha/widgets/dialogs/select_year_dialog.dart';
 
 class YearSelector extends StatefulWidget {
   YearSelector({
@@ -24,12 +25,8 @@ class YearSelector extends StatefulWidget {
 
 class _YearSelectorState extends State<YearSelector>
     with SingleTickerProviderStateMixin {
-  final ScrollController _scrollController = ScrollController();
   late AnimationController _animatedcontroller;
   late List<int> years = [];
-  late int _focusedYear;
-
-  bool _openYearSelector = false;
 
   @override
   void initState() {
@@ -39,7 +36,6 @@ class _YearSelectorState extends State<YearSelector>
       widget.end - widget.start + 1,
       (index) => index + widget.start,
     );
-    _focusedYear = widget.selectedDay.year;
 
     _animatedcontroller = AnimationController(
       vsync: this,
@@ -56,8 +52,6 @@ class _YearSelectorState extends State<YearSelector>
 
   @override
   Widget build(BuildContext context) {
-    final double fullWidth = MediaQuery.of(context).size.width;
-
     return Column(
       children: [
         Stack(
@@ -75,123 +69,20 @@ class _YearSelectorState extends State<YearSelector>
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       IconButton(
-                        onPressed: () {
-                          showDialog(
+                        onPressed: () async {
+                          var response = await showDialog(
                             context: context,
                             builder: (context) {
-                              return AlertDialog(
-                                insetPadding: EdgeInsets.zero,
-                                contentPadding: EdgeInsets.zero,
-                                backgroundColor: Colors.transparent,
-                                content: Builder(
-                                  builder: (context) {
-                                    return Column(
-                                      children: [
-                                        const SizedBox(height: 57),
-                                        Container(
-                                          width: double.infinity,
-                                          height: 40,
-                                          color: pallete[Pallete.deepNavy],
-                                          child: Stack(children: [
-                                            Positioned.fill(
-                                              child: Center(
-                                                child: Text(
-                                                  DateFormat('yyyy.MM.dd')
-                                                      .format(
-                                                          widget.selectedDay),
-                                                  style: types[Types.semi_lg]!
-                                                      .copyWith(
-                                                    color:
-                                                        pallete[Pallete.white],
-                                                  ),
-                                                ),
-                                              ),
-                                            )
-                                          ]),
-                                        ),
-                                        const SizedBox(height: 4),
-                                        Container(
-                                          width: double.infinity,
-                                          height: 40,
-                                          alignment: Alignment.center,
-                                          color: pallete[Pallete.deepNavy],
-                                          child: Text(
-                                            'Years',
-                                            style:
-                                                types[Types.semi_lg]!.copyWith(
-                                              color: pallete[Pallete.white],
-                                            ),
-                                          ),
-                                        ),
-                                        Container(
-                                          width: fullWidth,
-                                          height: 52 * 6.0 + 32.0,
-                                          color: pallete[Pallete.alaskanBlue],
-                                          padding: const EdgeInsets.symmetric(
-                                            vertical: 16,
-                                            horizontal: 72,
-                                          ),
-                                          child: GridView(
-                                            gridDelegate:
-                                                const SliverGridDelegateWithFixedCrossAxisCount(
-                                              crossAxisCount: 3,
-                                              mainAxisExtent: 52,
-                                              crossAxisSpacing: 8,
-                                              mainAxisSpacing: 0,
-                                            ),
-                                            controller: _scrollController,
-                                            children: [
-                                              for (final year in years)
-                                                SizedBox(
-                                                  height: 36,
-                                                  child: Center(
-                                                    child: TextButton(
-                                                      onPressed: () {
-                                                        setState(() {
-                                                          _focusedYear = year;
-                                                        });
-                                                      },
-                                                      style:
-                                                          TextButton.styleFrom(
-                                                        foregroundColor: year ==
-                                                                _focusedYear
-                                                            ? pallete[Pallete
-                                                                .deepNavy]
-                                                            : pallete[
-                                                                Pallete.white],
-                                                        backgroundColor: year ==
-                                                                _focusedYear
-                                                            ? pallete[
-                                                                Pallete.flash]
-                                                            : pallete[Pallete
-                                                                .alaskanBlue],
-                                                        shape:
-                                                            RoundedRectangleBorder(
-                                                          borderRadius:
-                                                              BorderRadius
-                                                                  .circular(30),
-                                                        ),
-                                                      ),
-                                                      child: Text(
-                                                        '$year',
-                                                        style: types[
-                                                            Types.regular_md],
-                                                        textAlign:
-                                                            TextAlign.center,
-                                                      ),
-                                                    ),
-                                                  ),
-                                                ),
-                                            ],
-                                          ),
-                                        ),
-                                      ],
-                                    );
-                                  },
-                                ),
+                              return SelectYearDialog(
+                                selectedDay: widget.selectedDay,
+                                years: years,
                               );
                             },
                           );
+
+                          if (response == null) {
+                            print('끝');
+                          }
                         },
                         icon: SvgPicture.asset(
                           'assets/icons/toggle_calendar_btn.svg',
@@ -199,22 +90,6 @@ class _YearSelectorState extends State<YearSelector>
                         splashColor: Colors.transparent,
                         highlightColor: Colors.transparent,
                       ),
-                      if (_openYearSelector)
-                        TextButton(
-                          onPressed: () {
-                            widget.changeYear(_focusedYear);
-                            setState(() {
-                              _openYearSelector = false;
-                            });
-                            _animatedcontroller.reverse();
-                          },
-                          child: Text(
-                            '완료',
-                            style: types[Types.semi_lg]!.copyWith(
-                              color: pallete[Pallete.white],
-                            ),
-                          ),
-                        ),
                     ],
                   ),
                 ),
