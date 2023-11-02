@@ -26,10 +26,15 @@ class Calendar extends StatelessWidget {
       ),
       child: Stack(
         children: [
-          WorkoutCalendar(
-            selectedDay: selectedDay,
-            calendarFormat: calendarFormat,
-            onDaySelected: selectDay,
+          Column(
+            children: [
+              const SizedBox(height: 56),
+              WorkoutCalendar(
+                selectedDay: selectedDay,
+                calendarFormat: calendarFormat,
+                onDaySelected: selectDay,
+              ),
+            ],
           ),
           YearSelector(
             selectedDay: selectedDay,

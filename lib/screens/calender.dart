@@ -45,28 +45,25 @@ class _CalendarScreenState extends ConsumerState<CalendarScreen> {
 
     return SizedBox(
       height: double.infinity,
-      child: Column(
+      child: Stack(
         children: [
+          if (isSelectDate)
+            Column(
+              children: [
+                const SizedBox(height: 228),
+                Expanded(
+                  child: WorkoutList(
+                    list: _workout[_selectedFormattedDay] ?? [],
+                  ),
+                ),
+              ],
+            ),
           Calendar(
             selectedDay: _selectedDay,
             calendarFormat: _calendarFormat,
             selectDay: _selectDay,
             changeYear: _changeYear,
           ),
-          Container(
-            width: isSelectDate ? double.infinity : 0,
-            height: 4,
-            color: pallete[Pallete.deepNavy],
-            margin: const EdgeInsets.only(
-              bottom: 2,
-            ),
-          ),
-          if (isSelectDate)
-            Expanded(
-              child: WorkoutList(
-                list: _workout[_selectedFormattedDay] ?? [],
-              ),
-            ),
         ],
       ),
     );
