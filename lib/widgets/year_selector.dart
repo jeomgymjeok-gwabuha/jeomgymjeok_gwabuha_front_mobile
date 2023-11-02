@@ -69,49 +69,154 @@ class _YearSelectorState extends State<YearSelector>
             ),
             Stack(
               children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    IconButton(
-                      onPressed: () {
-                        setState(() {
-                          _openYearSelector = !_openYearSelector;
-                        });
-
-                        if (_openYearSelector) {
-                          _animatedcontroller.forward();
-                          final foundIndex = years.indexWhere(
-                              (element) => element == widget.selectedDay.year);
-                          final rowCount = (foundIndex ~/ 3).toDouble();
-                          _scrollController.jumpTo(52 * rowCount);
-                        } else {
-                          _focusedYear = widget.selectedDay.year;
-                          _animatedcontroller.reverse();
-                        }
-                      },
-                      icon: SvgPicture.asset(
-                        'assets/icons/toggle_calendar_btn.svg',
-                      ),
-                      splashColor: Colors.transparent,
-                      highlightColor: Colors.transparent,
-                    ),
-                    if (_openYearSelector)
-                      TextButton(
+                SizedBox(
+                  height: 40,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      IconButton(
                         onPressed: () {
-                          widget.changeYear(_focusedYear);
-                          setState(() {
-                            _openYearSelector = false;
-                          });
-                          _animatedcontroller.reverse();
+                          showDialog(
+                            context: context,
+                            builder: (context) {
+                              return AlertDialog(
+                                insetPadding: EdgeInsets.zero,
+                                contentPadding: EdgeInsets.zero,
+                                backgroundColor: Colors.transparent,
+                                content: Builder(
+                                  builder: (context) {
+                                    return Column(
+                                      children: [
+                                        const SizedBox(height: 57),
+                                        Container(
+                                          width: double.infinity,
+                                          height: 40,
+                                          color: pallete[Pallete.deepNavy],
+                                          child: Stack(children: [
+                                            Positioned.fill(
+                                              child: Center(
+                                                child: Text(
+                                                  DateFormat('yyyy.MM.dd')
+                                                      .format(
+                                                          widget.selectedDay),
+                                                  style: types[Types.semi_lg]!
+                                                      .copyWith(
+                                                    color:
+                                                        pallete[Pallete.white],
+                                                  ),
+                                                ),
+                                              ),
+                                            )
+                                          ]),
+                                        ),
+                                        const SizedBox(height: 4),
+                                        Container(
+                                          width: double.infinity,
+                                          height: 40,
+                                          alignment: Alignment.center,
+                                          color: pallete[Pallete.deepNavy],
+                                          child: Text(
+                                            'Years',
+                                            style:
+                                                types[Types.semi_lg]!.copyWith(
+                                              color: pallete[Pallete.white],
+                                            ),
+                                          ),
+                                        ),
+                                        Container(
+                                          width: fullWidth,
+                                          height: 52 * 6.0 + 32.0,
+                                          color: pallete[Pallete.alaskanBlue],
+                                          padding: const EdgeInsets.symmetric(
+                                            vertical: 16,
+                                            horizontal: 72,
+                                          ),
+                                          child: GridView(
+                                            gridDelegate:
+                                                const SliverGridDelegateWithFixedCrossAxisCount(
+                                              crossAxisCount: 3,
+                                              mainAxisExtent: 52,
+                                              crossAxisSpacing: 8,
+                                              mainAxisSpacing: 0,
+                                            ),
+                                            controller: _scrollController,
+                                            children: [
+                                              for (final year in years)
+                                                SizedBox(
+                                                  height: 36,
+                                                  child: Center(
+                                                    child: TextButton(
+                                                      onPressed: () {
+                                                        setState(() {
+                                                          _focusedYear = year;
+                                                        });
+                                                      },
+                                                      style:
+                                                          TextButton.styleFrom(
+                                                        foregroundColor: year ==
+                                                                _focusedYear
+                                                            ? pallete[Pallete
+                                                                .deepNavy]
+                                                            : pallete[
+                                                                Pallete.white],
+                                                        backgroundColor: year ==
+                                                                _focusedYear
+                                                            ? pallete[
+                                                                Pallete.flash]
+                                                            : pallete[Pallete
+                                                                .alaskanBlue],
+                                                        shape:
+                                                            RoundedRectangleBorder(
+                                                          borderRadius:
+                                                              BorderRadius
+                                                                  .circular(30),
+                                                        ),
+                                                      ),
+                                                      child: Text(
+                                                        '$year',
+                                                        style: types[
+                                                            Types.regular_md],
+                                                        textAlign:
+                                                            TextAlign.center,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ),
+                                            ],
+                                          ),
+                                        ),
+                                      ],
+                                    );
+                                  },
+                                ),
+                              );
+                            },
+                          );
                         },
-                        child: Text(
-                          '완료',
-                          style: types[Types.semi_lg]!.copyWith(
-                            color: pallete[Pallete.white],
+                        icon: SvgPicture.asset(
+                          'assets/icons/toggle_calendar_btn.svg',
+                        ),
+                        splashColor: Colors.transparent,
+                        highlightColor: Colors.transparent,
+                      ),
+                      if (_openYearSelector)
+                        TextButton(
+                          onPressed: () {
+                            widget.changeYear(_focusedYear);
+                            setState(() {
+                              _openYearSelector = false;
+                            });
+                            _animatedcontroller.reverse();
+                          },
+                          child: Text(
+                            '완료',
+                            style: types[Types.semi_lg]!.copyWith(
+                              color: pallete[Pallete.white],
+                            ),
                           ),
                         ),
-                      ),
-                  ],
+                    ],
+                  ),
                 ),
                 Positioned.fill(
                   child: Center(
@@ -126,75 +231,6 @@ class _YearSelectorState extends State<YearSelector>
               ],
             ),
           ],
-        ),
-        SizeTransition(
-          sizeFactor: _animatedcontroller,
-          child: Column(
-            children: [
-              const SizedBox(height: 4),
-              Container(
-                width: double.infinity,
-                height: 40,
-                alignment: Alignment.center,
-                color: pallete[Pallete.deepNavy],
-                child: Text(
-                  'Years',
-                  style: types[Types.semi_lg]!.copyWith(
-                    color: pallete[Pallete.white],
-                  ),
-                ),
-              ),
-              Container(
-                width: fullWidth,
-                height: 52 * 6.0 + 32.0,
-                color: pallete[Pallete.alaskanBlue],
-                padding: const EdgeInsets.symmetric(
-                  vertical: 16,
-                  horizontal: 72,
-                ),
-                child: GridView(
-                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 3,
-                    mainAxisExtent: 52,
-                    crossAxisSpacing: 8,
-                    mainAxisSpacing: 0,
-                  ),
-                  controller: _scrollController,
-                  children: [
-                    for (final year in years)
-                      SizedBox(
-                        height: 36,
-                        child: Center(
-                          child: TextButton(
-                            onPressed: () {
-                              setState(() {
-                                _focusedYear = year;
-                              });
-                            },
-                            style: TextButton.styleFrom(
-                              foregroundColor: year == _focusedYear
-                                  ? pallete[Pallete.deepNavy]
-                                  : pallete[Pallete.white],
-                              backgroundColor: year == _focusedYear
-                                  ? pallete[Pallete.flash]
-                                  : pallete[Pallete.alaskanBlue],
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(30),
-                              ),
-                            ),
-                            child: Text(
-                              '$year',
-                              style: types[Types.regular_md],
-                              textAlign: TextAlign.center,
-                            ),
-                          ),
-                        ),
-                      ),
-                  ],
-                ),
-              ),
-            ],
-          ),
         ),
       ],
     );
