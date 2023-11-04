@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:intl/intl.dart';
 import 'package:jeomgymjeok_gwabuha/design/Pallete.dart';
 import 'package:jeomgymjeok_gwabuha/models/m_workout_item.dart';
@@ -64,6 +65,24 @@ class _CalendarScreenState extends ConsumerState<CalendarScreen> {
             selectDay: _selectDay,
             changeYear: _changeYear,
           ),
+          if (isSelectDate)
+            Positioned(
+                bottom: 16,
+                right: 16,
+                child: Container(
+                  width: 48,
+                  height: 48,
+                  decoration: BoxDecoration(
+                    color: pallete[Pallete.deepNavy],
+                    borderRadius: BorderRadius.circular(24),
+                  ),
+                  child: IconButton(
+                    onPressed: () {},
+                    icon: SvgPicture.asset(
+                      'assets/icons/union.svg',
+                    ),
+                  ),
+                ))
         ],
       ),
     );
