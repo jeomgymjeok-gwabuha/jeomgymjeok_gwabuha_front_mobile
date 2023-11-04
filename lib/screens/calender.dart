@@ -6,7 +6,8 @@ import 'package:jeomgymjeok_gwabuha/design/Pallete.dart';
 import 'package:jeomgymjeok_gwabuha/models/m_workout_item.dart';
 import 'package:jeomgymjeok_gwabuha/providers/date_provider.dart';
 import 'package:jeomgymjeok_gwabuha/providers/workout_provider.dart';
-import 'package:jeomgymjeok_gwabuha/widgets/calendar.dart';
+import 'package:jeomgymjeok_gwabuha/screens/add_workout.dart';
+import 'package:jeomgymjeok_gwabuha/widgets/calendar_section.dart';
 import 'package:jeomgymjeok_gwabuha/widgets/workout_list.dart';
 import 'package:table_calendar/table_calendar.dart';
 
@@ -35,6 +36,14 @@ class _CalendarScreenState extends ConsumerState<CalendarScreen> {
     });
   }
 
+  void _onPrevMonth(DateTime prevMonth) {
+    ref.read(dateProvider.notifier).setDate(prevMonth);
+  }
+
+  void _onNextMonth(DateTime nextMonth) {
+    ref.read(dateProvider.notifier).setDate(nextMonth);
+  }
+
   get _selectedFormattedDay {
     return DateFormat('yyyy.MM.dd').format(ref.watch(dateProvider));
   }
@@ -59,11 +68,13 @@ class _CalendarScreenState extends ConsumerState<CalendarScreen> {
                 ),
               ],
             ),
-          Calendar(
+          CalendarSection(
             selectedDay: _selectedDay,
             calendarFormat: _calendarFormat,
             selectDay: _selectDay,
             changeYear: _changeYear,
+            onNextMonth: _onNextMonth,
+            onPrevMonth: _onPrevMonth,
           ),
           if (isSelectDate)
             Positioned(
@@ -77,7 +88,11 @@ class _CalendarScreenState extends ConsumerState<CalendarScreen> {
                     borderRadius: BorderRadius.circular(24),
                   ),
                   child: IconButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.of(context).push(MaterialPageRoute(
+                        builder: (ctx) => AddWorkout(),
+                      ));
+                    },
                     icon: SvgPicture.asset(
                       'assets/icons/union.svg',
                     ),
