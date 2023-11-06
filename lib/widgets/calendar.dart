@@ -6,13 +6,14 @@ import 'package:jeomgymjeok_gwabuha/design/Types.dart';
 import 'package:table_calendar/table_calendar.dart';
 
 class Calendar extends StatefulWidget {
-  const Calendar({
+  Calendar({
     super.key,
     required this.selectedDay,
     required this.calendarFormat,
     required this.onDaySelected,
     required this.onPrevMonth,
     required this.onNextMonth,
+    this.type = 'workout',
   });
 
   final DateTime selectedDay;
@@ -20,6 +21,7 @@ class Calendar extends StatefulWidget {
   final void Function(DateTime selectedDay, DateTime focusedDay) onDaySelected;
   final void Function(DateTime prevMonth) onPrevMonth;
   final void Function(DateTime nextMonth) onNextMonth;
+  String? type;
 
   @override
   State<Calendar> createState() => _WorkoutCalendarState();
@@ -44,6 +46,10 @@ class _WorkoutCalendarState extends State<Calendar> {
     final newDateTime = DateTime(year, month, widget.selectedDay.day);
 
     widget.onNextMonth(newDateTime);
+  }
+
+  void onPageChanged(DateTime date) {
+    widget.onDaySelected(date, date);
   }
 
   @override
@@ -102,6 +108,7 @@ class _WorkoutCalendarState extends State<Calendar> {
           selectedDayPredicate: (day) {
             return isSameDay(widget.selectedDay, day);
           },
+          onPageChanged: onPageChanged,
           onDaySelected: widget.onDaySelected,
           headerVisible: false,
           calendarBuilders: CalendarBuilders(
@@ -115,7 +122,9 @@ class _WorkoutCalendarState extends State<Calendar> {
                   child: Text(
                     value,
                     style: types[Types.light_md]!.copyWith(
-                      color: pallete[Pallete.deepNavy],
+                      color: widget.type == 'workout'
+                          ? pallete[Pallete.deepNavy]
+                          : pallete[Pallete.white],
                     ),
                   ),
                 ),
@@ -131,7 +140,9 @@ class _WorkoutCalendarState extends State<Calendar> {
                   child: Text(
                     value,
                     style: types[Types.light_md]!.copyWith(
-                      color: pallete[Pallete.deepNavy],
+                      color: widget.type == 'workout'
+                          ? pallete[Pallete.deepNavy]
+                          : pallete[Pallete.white],
                     ),
                   ),
                 ),
@@ -145,13 +156,17 @@ class _WorkoutCalendarState extends State<Calendar> {
                   width: double.infinity,
                   height: double.infinity,
                   decoration: BoxDecoration(
-                    color: pallete[Pallete.deepNavy],
+                    color: widget.type == 'workout'
+                        ? pallete[Pallete.deepNavy]
+                        : pallete[Pallete.flash],
                     borderRadius: BorderRadius.circular(14),
                   ),
                   child: Center(
                     child: Text(value,
                         style: types[Types.semi_md]!.copyWith(
-                          color: pallete[Pallete.flash],
+                          color: widget.type == 'workout'
+                              ? pallete[Pallete.flash]
+                              : pallete[Pallete.deepNavy],
                         )),
                   ),
                 ),
@@ -165,7 +180,9 @@ class _WorkoutCalendarState extends State<Calendar> {
                 child: Center(
                   child: Text(value,
                       style: types[Types.light_md]!.copyWith(
-                        color: pallete[Pallete.alaskanBlue],
+                        color: widget.type == 'workout'
+                            ? pallete[Pallete.alaskanBlue]
+                            : pallete[Pallete.white]!.withOpacity(0.5),
                       )),
                 ),
               );
@@ -181,7 +198,9 @@ class _WorkoutCalendarState extends State<Calendar> {
                   child: Text(
                     list[weekDay],
                     style: types[Types.semi_md]!.copyWith(
-                      color: pallete[Pallete.deepNavy],
+                      color: widget.type == 'workout'
+                          ? pallete[Pallete.deepNavy]
+                          : pallete[Pallete.white],
                     ),
                   ),
                 ),
