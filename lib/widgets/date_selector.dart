@@ -3,7 +3,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:intl/intl.dart';
 import 'package:jeomgymjeok_gwabuha/design/Pallete.dart';
 import 'package:jeomgymjeok_gwabuha/design/Types.dart';
-import 'package:jeomgymjeok_gwabuha/widgets/dialogs/select_year_dialog.dart';
+import 'package:jeomgymjeok_gwabuha/widgets/dialogs/select_date_dialog.dart';
 
 class DateSelector extends StatefulWidget {
   DateSelector({
@@ -11,13 +11,13 @@ class DateSelector extends StatefulWidget {
     required this.selectedDay,
     required this.start,
     required this.end,
-    required this.changeYear,
+    required this.changeDate,
   });
 
   final int start;
   final int end;
   final DateTime selectedDay;
-  void Function(int value) changeYear;
+  void Function(DateTime date) changeDate;
 
   @override
   State<DateSelector> createState() => _DateSelectorState();
@@ -27,6 +27,22 @@ class _DateSelectorState extends State<DateSelector>
     with SingleTickerProviderStateMixin {
   late AnimationController _animatedcontroller;
   late List<int> years = [];
+
+  void _openSelectDate() async {
+    var response = await showDialog(
+      context: context,
+      builder: (context) {
+        return SelectDateDialog(
+          selectedDay: widget.selectedDay,
+          years: years,
+        );
+      },
+    );
+
+    if (response != null && response is DateTime) {
+      widget.changeDate(response);
+    }
+  }
 
   @override
   void initState() {
@@ -58,7 +74,10 @@ class _DateSelectorState extends State<DateSelector>
           children: [
             Positioned.fill(
               child: Container(
-                color: pallete[Pallete.deepNavy],
+                decoration: BoxDecoration(
+                  color: pallete[Pallete.deepNavy],
+                  borderRadius: BorderRadius.circular(4),
+                ),
               ),
             ),
             Stack(
@@ -69,21 +88,7 @@ class _DateSelectorState extends State<DateSelector>
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       IconButton(
-                        onPressed: () async {
-                          var response = await showDialog(
-                            context: context,
-                            builder: (context) {
-                              return SelectYearDialog(
-                                selectedDay: widget.selectedDay,
-                                years: years,
-                              );
-                            },
-                          );
-
-                          if (response != null && response is int) {
-                            widget.changeYear(response);
-                          }
-                        },
+                        onPressed: _openSelectDate,
                         icon: SvgPicture.asset(
                           'assets/icons/toggle_calendar_btn.svg',
                         ),
