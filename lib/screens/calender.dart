@@ -90,7 +90,7 @@ class _CalendarScreenState extends ConsumerState<CalendarScreen> {
                   child: IconButton(
                     onPressed: () {
                       Navigator.of(context).push(MaterialPageRoute(
-                        builder: (ctx) => AddWorkout(),
+                        builder: (ctx) => AddWorkout(selectedDay: _selectedDay),
                       ));
                     },
                     icon: SvgPicture.asset(
