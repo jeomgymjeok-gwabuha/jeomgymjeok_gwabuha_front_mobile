@@ -17,7 +17,8 @@ enum Types {
   light_xs,
   light_sm,
   light_md,
-  light_lg
+  light_lg,
+  input_helper
 }
 
 final Map<Types, TextStyle> types = {
@@ -109,5 +110,10 @@ final Map<Types, TextStyle> types = {
     fontSize: 20,
     height: 1.5,
     fontWeight: FontWeight.w300,
+  ),
+  Types.input_helper: GoogleFonts.roboto(
+    fontSize: 12,
+    height: 1.6,
+    fontWeight: FontWeight.w400,
   ),
 };
