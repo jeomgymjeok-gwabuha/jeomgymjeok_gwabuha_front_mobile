@@ -9,12 +9,14 @@ class TextBtn extends StatelessWidget {
     required this.onPressed,
     this.width = 120,
     this.height = 56,
+    this.borderRadius = 14,
     this.backgroundColor = Pallete.deepNavy,
     this.textColor = Pallete.white,
   });
 
   final double? width;
   final double? height;
+  final double? borderRadius;
   final String text;
 
   final Pallete? backgroundColor;
@@ -33,7 +35,7 @@ class TextBtn extends StatelessWidget {
           padding: const EdgeInsets.all(0),
           backgroundColor: pallete[backgroundColor],
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(14),
+            borderRadius: BorderRadius.circular(borderRadius!),
           ),
         ),
         onPressed: onPressed,
