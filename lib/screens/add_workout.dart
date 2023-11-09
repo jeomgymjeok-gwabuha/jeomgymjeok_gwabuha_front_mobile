@@ -4,6 +4,7 @@ import 'package:jeomgymjeok_gwabuha/design/Pallete.dart';
 import 'package:jeomgymjeok_gwabuha/design/Types.dart';
 import 'package:jeomgymjeok_gwabuha/widgets/common/text_btn.dart';
 import 'package:jeomgymjeok_gwabuha/widgets/date_selector.dart';
+import 'package:jeomgymjeok_gwabuha/widgets/set_table.dart';
 
 class AddWorkout extends StatefulWidget {
   const AddWorkout({
@@ -157,6 +158,7 @@ class _AddWorkoutState extends State<AddWorkout> {
                           borderRadius: 4,
                         ),
                       ),
+                      const SetTable(),
                     ],
                   ),
                 )
