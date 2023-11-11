@@ -22,13 +22,12 @@ class AddWorkout extends StatefulWidget {
 class _AddWorkoutState extends State<AddWorkout> {
   late DateTime _recordDate;
   bool _invalidWorkoutName = false;
-  MSetTableFormItem? _invalidSetTable;
+  Map<String, MSetTableFormItem> _invalidSetTable = {};
 
   final _formKey = GlobalKey<FormState>();
   final TextEditingController _textController = TextEditingController();
   final List<MSetTableFormItem> _setTableForm = [
     MSetTableFormItem(
-      sequence: 1,
       weightController: TextEditingController(),
       countController: TextEditingController(),
     ),
@@ -44,7 +43,6 @@ class _AddWorkoutState extends State<AddWorkout> {
     setState(() {
       _setTableForm.add(
         MSetTableFormItem(
-          sequence: _setTableForm.length + 1,
           weightController: TextEditingController(),
           countController: TextEditingController(),
         ),
@@ -69,17 +67,20 @@ class _AddWorkoutState extends State<AddWorkout> {
 
     if (!isValid) {
       setState(() {
-        _invalidSetTable = null;
+        _invalidSetTable = {};
       });
       return;
     }
 
-    int invalidIndex =
-        _setTableForm.indexWhere((el) => el.isCountEmpty || el.isWeightEmpty);
+    List<MSetTableFormItem> invalidsetTableForm = _setTableForm
+        .where((el) => el.isCountEmpty || el.isWeightEmpty)
+        .toList();
 
-    if (invalidIndex > -1) {
+    if (invalidsetTableForm.isNotEmpty) {
       setState(() {
-        _invalidSetTable = _setTableForm[invalidIndex];
+        _invalidSetTable = {
+          for (var item in invalidsetTableForm) item.id: item
+        };
       });
       return;
     }

@@ -15,7 +15,7 @@ class SetTableForm extends StatelessWidget {
   });
 
   final List<MSetTableFormItem> formData;
-  final MSetTableFormItem? invalidSetTable;
+  final Map<String, MSetTableFormItem> invalidSetTable;
   final void Function() addSetTableRow;
   final void Function(int index) removeSetTableRow;
 
@@ -79,13 +79,18 @@ class SetTableForm extends StatelessWidget {
             (index) => setTableItem(
               sequence: index + 1,
               item: formData[index],
-              isGeneratedWidgetError: invalidSetTable != null
-                  ? invalidSetTable!.sequence == formData[index].sequence &&
-                      invalidSetTable!.weightController.text.isEmpty
-                  : false,
-              isGeneratedCountError: invalidSetTable != null
-                  ? invalidSetTable!.sequence == formData[index].sequence &&
-                      invalidSetTable!.countController.text.isEmpty
+              isGeneratedWidgetError:
+                  invalidSetTable[formData[index].id] != null
+                      ? invalidSetTable[formData[index].id]!
+                          .weightController
+                          .text
+                          .isEmpty
+                      : false,
+              isGeneratedCountError: invalidSetTable[formData[index].id] != null
+                  ? invalidSetTable[formData[index].id]!
+                      .countController
+                      .text
+                      .isEmpty
                   : false,
               removeSetTableRow: () => removeSetTableRow(index),
             ),

@@ -1,13 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:uuid/uuid.dart';
+
+const uuid = Uuid();
 
 class MSetTableFormItem {
   MSetTableFormItem({
-    required this.sequence,
+    String? id,
     required this.weightController,
     required this.countController,
-  });
+  }) : id = id ?? uuid.v4();
 
-  final int sequence;
+  final String id;
   final TextEditingController weightController;
   final TextEditingController countController;
 
