@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:jeomgymjeok_gwabuha/design/Pallete.dart';
 import 'package:jeomgymjeok_gwabuha/design/Types.dart';
+import 'package:jeomgymjeok_gwabuha/models/m_set_table_form_item.dart';
 import 'package:jeomgymjeok_gwabuha/widgets/common/text_btn.dart';
 import 'package:jeomgymjeok_gwabuha/widgets/date_selector.dart';
 import 'package:jeomgymjeok_gwabuha/widgets/set_table_form/index.dart';
@@ -20,15 +21,17 @@ class AddWorkout extends StatefulWidget {
 
 class _AddWorkoutState extends State<AddWorkout> {
   late DateTime _recordDate;
+  bool _invalidWorkoutName = false;
+  MSetTableFormItem? _invalidSetTable;
+
   final _formKey = GlobalKey<FormState>();
   final TextEditingController _textController = TextEditingController();
-  bool _invalidWorkoutName = false;
-  final List<Map<String, Object>> setTableForm = [
-    {
-      'sequence': 1,
-      'weight': TextEditingController(),
-      'count': TextEditingController(),
-    }
+  final List<MSetTableFormItem> _setTableForm = [
+    MSetTableFormItem(
+      sequence: 1,
+      weightController: TextEditingController(),
+      countController: TextEditingController(),
+    ),
   ];
 
   @override
@@ -42,6 +45,27 @@ class _AddWorkoutState extends State<AddWorkout> {
     setState(() {
       _recordDate = date;
     });
+  }
+
+  void _submit() {
+    final isValid = _formKey.currentState!.validate();
+
+    if (!isValid) {
+      setState(() {
+        _invalidSetTable = null;
+      });
+      return;
+    }
+
+    int invalidIndex =
+        _setTableForm.indexWhere((el) => el.isCountEmpty || el.isWeightEmpty);
+
+    if (invalidIndex > -1) {
+      setState(() {
+        _invalidSetTable = _setTableForm[invalidIndex];
+      });
+      return;
+    }
   }
 
   @override
@@ -67,9 +91,7 @@ class _AddWorkoutState extends State<AddWorkout> {
         ),
         actions: [
           TextButton(
-            onPressed: () {
-              _formKey.currentState!.validate();
-            },
+            onPressed: _submit,
             child: Text(
               '완료',
               style: types[Types.semi_lg]!.copyWith(
@@ -165,7 +187,10 @@ class _AddWorkoutState extends State<AddWorkout> {
                           borderRadius: 4,
                         ),
                       ),
-                      const SetTableForm(),
+                      SetTableForm(
+                        formData: _setTableForm,
+                        invalidSetTable: _invalidSetTable,
+                      ),
                     ],
                   ),
                 )

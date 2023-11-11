@@ -2,10 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:jeomgymjeok_gwabuha/design/Pallete.dart';
 import 'package:jeomgymjeok_gwabuha/design/Types.dart';
+import 'package:jeomgymjeok_gwabuha/models/m_set_table_form_item.dart';
 import 'package:jeomgymjeok_gwabuha/widgets/set_table_form/set_table_item.dart';
 
 class SetTableForm extends StatelessWidget {
-  const SetTableForm({super.key});
+  const SetTableForm({
+    super.key,
+    required this.formData,
+    required this.invalidSetTable,
+  });
+
+  final List<MSetTableFormItem> formData;
+  final MSetTableFormItem? invalidSetTable;
 
   @override
   Widget build(BuildContext context) {
@@ -61,7 +69,23 @@ class SetTableForm extends StatelessWidget {
             ],
           ),
         ),
-        setTableItem(),
+        Column(
+          children: formData
+              .map(
+                (item) => setTableItem(
+                  item: item,
+                  isGeneratedWidgetError: invalidSetTable != null
+                      ? invalidSetTable!.sequence == item.sequence &&
+                          invalidSetTable!.weightController.text.isEmpty
+                      : false,
+                  isGeneratedCountError: invalidSetTable != null
+                      ? invalidSetTable!.sequence == item.sequence &&
+                          invalidSetTable!.countController.text.isEmpty
+                      : false,
+                ),
+              )
+              .toList(),
+        ),
         SizedBox(
           width: double.infinity,
           height: 48,

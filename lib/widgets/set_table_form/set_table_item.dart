@@ -2,9 +2,19 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:jeomgymjeok_gwabuha/design/Pallete.dart';
 import 'package:jeomgymjeok_gwabuha/design/Types.dart';
+import 'package:jeomgymjeok_gwabuha/models/m_set_table_form_item.dart';
 
 class setTableItem extends StatelessWidget {
-  const setTableItem({super.key});
+  const setTableItem({
+    super.key,
+    required this.item,
+    required this.isGeneratedWidgetError,
+    required this.isGeneratedCountError,
+  });
+
+  final MSetTableFormItem item;
+  final bool isGeneratedWidgetError;
+  final bool isGeneratedCountError;
 
   @override
   Widget build(BuildContext context) {
@@ -30,7 +40,7 @@ class setTableItem extends StatelessWidget {
               borderRadius: BorderRadius.circular(12),
             ),
             child: Text(
-              '1Set',
+              '${item.sequence}Set',
               style: types[Types.semi_sm]!.copyWith(
                 color: pallete[Pallete.deepNavy],
               ),
@@ -39,32 +49,37 @@ class setTableItem extends StatelessWidget {
           const SizedBox(width: 16),
           SizedBox(
             width: 80,
-            height: 24,
             child: TextField(
+              controller: item.weightController,
               keyboardType: TextInputType.number,
               style: types[Types.semi_sm]!.copyWith(
                 color: pallete[Pallete.alaskanBlue],
               ),
               textAlign: TextAlign.center,
               decoration: InputDecoration(
-                label: Center(
-                  child: Text(
-                    "-",
-                    style: types[Types.semi_sm]!.copyWith(
-                      color: pallete[Pallete.deepNavy],
-                    ),
-                  ),
+                isDense: true,
+                contentPadding:
+                    const EdgeInsets.symmetric(vertical: 4, horizontal: 6),
+                hintText: "-",
+                hintStyle: types[Types.semi_sm]!.copyWith(
+                  color: isGeneratedWidgetError
+                      ? pallete[Pallete.red01]!
+                      : pallete[Pallete.alaskanBlue]!,
                 ),
                 enabledBorder: OutlineInputBorder(
                   borderSide: BorderSide(
                     width: 1,
-                    color: pallete[Pallete.alaskanBlue]!,
+                    color: isGeneratedWidgetError
+                        ? pallete[Pallete.red01]!
+                        : pallete[Pallete.alaskanBlue]!,
                   ),
                 ),
                 focusedBorder: OutlineInputBorder(
                   borderSide: BorderSide(
                     width: 1,
-                    color: pallete[Pallete.alaskanBlue]!,
+                    color: isGeneratedWidgetError
+                        ? pallete[Pallete.red01]!
+                        : pallete[Pallete.alaskanBlue]!,
                   ),
                 ),
               ),
@@ -80,32 +95,37 @@ class setTableItem extends StatelessWidget {
           const SizedBox(width: 20),
           SizedBox(
             width: 80,
-            height: 24,
             child: TextField(
+              controller: item.countController,
               keyboardType: TextInputType.number,
               style: types[Types.semi_sm]!.copyWith(
                 color: pallete[Pallete.alaskanBlue],
               ),
               textAlign: TextAlign.center,
               decoration: InputDecoration(
-                label: Center(
-                  child: Text(
-                    "-",
-                    style: types[Types.semi_sm]!.copyWith(
-                      color: pallete[Pallete.deepNavy],
-                    ),
-                  ),
+                isDense: true,
+                contentPadding:
+                    const EdgeInsets.symmetric(vertical: 4, horizontal: 6),
+                hintText: "-",
+                hintStyle: types[Types.semi_sm]!.copyWith(
+                  color: isGeneratedCountError
+                      ? pallete[Pallete.red01]!
+                      : pallete[Pallete.alaskanBlue]!,
                 ),
                 enabledBorder: OutlineInputBorder(
                   borderSide: BorderSide(
                     width: 1,
-                    color: pallete[Pallete.alaskanBlue]!,
+                    color: isGeneratedCountError
+                        ? pallete[Pallete.red01]!
+                        : pallete[Pallete.alaskanBlue]!,
                   ),
                 ),
                 focusedBorder: OutlineInputBorder(
                   borderSide: BorderSide(
                     width: 1,
-                    color: pallete[Pallete.alaskanBlue]!,
+                    color: isGeneratedCountError
+                        ? pallete[Pallete.red01]!
+                        : pallete[Pallete.alaskanBlue]!,
                   ),
                 ),
               ),
