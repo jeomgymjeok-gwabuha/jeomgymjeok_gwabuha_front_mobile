@@ -68,51 +68,54 @@ class _DateSelectorState extends State<DateSelector>
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Stack(
-          children: [
-            Positioned.fill(
-              child: Container(
-                decoration: BoxDecoration(
-                  color: pallete[Pallete.deepNavy],
-                  borderRadius: BorderRadius.circular(4),
+    return Container(
+      color: Colors.white,
+      child: Column(
+        children: [
+          Stack(
+            children: [
+              Positioned.fill(
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: pallete[Pallete.deepNavy],
+                    borderRadius: BorderRadius.circular(4),
+                  ),
                 ),
               ),
-            ),
-            Stack(
-              children: [
-                SizedBox(
-                  height: 40,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      IconButton(
-                        onPressed: _openSelectDate,
-                        icon: SvgPicture.asset(
-                          'assets/icons/toggle_calendar_btn.svg',
+              Stack(
+                children: [
+                  SizedBox(
+                    height: 40,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        IconButton(
+                          onPressed: _openSelectDate,
+                          icon: SvgPicture.asset(
+                            'assets/icons/toggle_calendar_btn.svg',
+                          ),
+                          splashColor: Colors.transparent,
+                          highlightColor: Colors.transparent,
                         ),
-                        splashColor: Colors.transparent,
-                        highlightColor: Colors.transparent,
-                      ),
-                    ],
-                  ),
-                ),
-                Positioned.fill(
-                  child: Center(
-                    child: Text(
-                      DateFormat('yyyy.MM.dd').format(widget.selectedDay),
-                      style: types[Types.semi_lg]!.copyWith(
-                        color: pallete[Pallete.white],
-                      ),
+                      ],
                     ),
                   ),
-                )
-              ],
-            ),
-          ],
-        ),
-      ],
+                  Positioned.fill(
+                    child: Center(
+                      child: Text(
+                        DateFormat('yyyy.MM.dd').format(widget.selectedDay),
+                        style: types[Types.semi_lg]!.copyWith(
+                          color: pallete[Pallete.white],
+                        ),
+                      ),
+                    ),
+                  )
+                ],
+              ),
+            ],
+          ),
+        ],
+      ),
     );
   }
 }

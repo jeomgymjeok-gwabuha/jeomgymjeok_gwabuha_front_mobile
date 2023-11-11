@@ -10,10 +10,14 @@ class SetTableForm extends StatelessWidget {
     super.key,
     required this.formData,
     required this.invalidSetTable,
+    required this.addSetTableRow,
+    required this.removeSetTableRow,
   });
 
   final List<MSetTableFormItem> formData;
   final MSetTableFormItem? invalidSetTable;
+  final void Function() addSetTableRow;
+  final void Function(int index) removeSetTableRow;
 
   @override
   Widget build(BuildContext context) {
@@ -70,27 +74,28 @@ class SetTableForm extends StatelessWidget {
           ),
         ),
         Column(
-          children: formData
-              .map(
-                (item) => setTableItem(
-                  item: item,
-                  isGeneratedWidgetError: invalidSetTable != null
-                      ? invalidSetTable!.sequence == item.sequence &&
-                          invalidSetTable!.weightController.text.isEmpty
-                      : false,
-                  isGeneratedCountError: invalidSetTable != null
-                      ? invalidSetTable!.sequence == item.sequence &&
-                          invalidSetTable!.countController.text.isEmpty
-                      : false,
-                ),
-              )
-              .toList(),
+          children: List.generate(
+            formData.length,
+            (index) => setTableItem(
+              sequence: index + 1,
+              item: formData[index],
+              isGeneratedWidgetError: invalidSetTable != null
+                  ? invalidSetTable!.sequence == formData[index].sequence &&
+                      invalidSetTable!.weightController.text.isEmpty
+                  : false,
+              isGeneratedCountError: invalidSetTable != null
+                  ? invalidSetTable!.sequence == formData[index].sequence &&
+                      invalidSetTable!.countController.text.isEmpty
+                  : false,
+              removeSetTableRow: () => removeSetTableRow(index),
+            ),
+          ),
         ),
         SizedBox(
           width: double.infinity,
           height: 48,
           child: ElevatedButton.icon(
-            onPressed: () {},
+            onPressed: addSetTableRow,
             icon: SvgPicture.asset(('assets/icons/white_union.svg')),
             style: ElevatedButton.styleFrom(
               backgroundColor: pallete[Pallete.deepNavy],

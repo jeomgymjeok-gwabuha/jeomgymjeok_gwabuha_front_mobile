@@ -7,14 +7,18 @@ import 'package:jeomgymjeok_gwabuha/models/m_set_table_form_item.dart';
 class setTableItem extends StatelessWidget {
   const setTableItem({
     super.key,
+    required this.sequence,
     required this.item,
     required this.isGeneratedWidgetError,
     required this.isGeneratedCountError,
+    required this.removeSetTableRow,
   });
 
+  final int sequence;
   final MSetTableFormItem item;
   final bool isGeneratedWidgetError;
   final bool isGeneratedCountError;
+  final void Function() removeSetTableRow;
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +29,7 @@ class setTableItem extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           IconButton(
-            onPressed: () {},
+            onPressed: removeSetTableRow,
             splashColor: Colors.transparent,
             highlightColor: Colors.transparent,
             icon: SvgPicture.asset('assets/icons/cancel.svg'),
@@ -40,7 +44,7 @@ class setTableItem extends StatelessWidget {
               borderRadius: BorderRadius.circular(12),
             ),
             child: Text(
-              '${item.sequence}Set',
+              '${sequence}Set',
               style: types[Types.semi_sm]!.copyWith(
                 color: pallete[Pallete.deepNavy],
               ),

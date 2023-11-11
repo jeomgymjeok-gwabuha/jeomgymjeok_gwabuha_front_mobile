@@ -36,9 +36,26 @@ class _AddWorkoutState extends State<AddWorkout> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     _recordDate = widget.selectedDay;
+  }
+
+  void _addSetTableRow() {
+    setState(() {
+      _setTableForm.add(
+        MSetTableFormItem(
+          sequence: _setTableForm.length + 1,
+          weightController: TextEditingController(),
+          countController: TextEditingController(),
+        ),
+      );
+    });
+  }
+
+  void _removeSetTableRow(int index) {
+    setState(() {
+      _setTableForm.removeAt(index);
+    });
   }
 
   void _changeRecordDate(DateTime date) {
@@ -115,83 +132,93 @@ class _AddWorkoutState extends State<AddWorkout> {
                   end: 2100,
                   changeDate: _changeRecordDate,
                 ),
-                Padding(
-                  padding: const EdgeInsets.only(top: 80, left: 24, right: 24),
-                  child: Column(
-                    children: [
-                      TextFormField(
-                        controller: _textController,
-                        decoration: InputDecoration(
-                          labelText: '운동 이름',
-                          labelStyle: types[Types.semi_md]!.copyWith(
-                              color: _invalidWorkoutName
-                                  ? pallete[Pallete.red01]
-                                  : pallete[Pallete.deepNavy]),
-                          errorStyle: types[Types.input_helper]!
-                              .copyWith(color: pallete[Pallete.red01]),
-                          enabledBorder: OutlineInputBorder(
-                            borderSide: BorderSide(
-                              color: pallete[Pallete.deepNavy]!,
-                              width: 2,
+                SizedBox(
+                  height: double.infinity - 41,
+                  child: Padding(
+                    padding:
+                        const EdgeInsets.only(top: 40, left: 24, right: 24),
+                    child: SingleChildScrollView(
+                      child: Column(
+                        children: [
+                          const SizedBox(height: 40),
+                          TextFormField(
+                            controller: _textController,
+                            decoration: InputDecoration(
+                              labelText: '운동 이름',
+                              labelStyle: types[Types.semi_md]!.copyWith(
+                                  color: _invalidWorkoutName
+                                      ? pallete[Pallete.red01]
+                                      : pallete[Pallete.deepNavy]),
+                              errorStyle: types[Types.input_helper]!
+                                  .copyWith(color: pallete[Pallete.red01]),
+                              enabledBorder: OutlineInputBorder(
+                                borderSide: BorderSide(
+                                  color: pallete[Pallete.deepNavy]!,
+                                  width: 2,
+                                ),
+                              ),
+                              focusedBorder: OutlineInputBorder(
+                                borderSide: BorderSide(
+                                  color: pallete[Pallete.deepNavy]!,
+                                  width: 2,
+                                ),
+                              ),
+                              errorBorder: OutlineInputBorder(
+                                borderSide: BorderSide(
+                                  color: pallete[Pallete.red01]!,
+                                  width: 2,
+                                ),
+                              ),
+                              focusedErrorBorder: OutlineInputBorder(
+                                borderSide: BorderSide(
+                                  color: pallete[Pallete.red01]!,
+                                  width: 2,
+                                ),
+                              ),
+                              contentPadding: const EdgeInsets.symmetric(
+                                horizontal: 32,
+                                vertical: 16,
+                              ),
                             ),
-                          ),
-                          focusedBorder: OutlineInputBorder(
-                            borderSide: BorderSide(
-                              color: pallete[Pallete.deepNavy]!,
-                              width: 2,
+                            keyboardType: TextInputType.text,
+                            style: types[Types.semi_md]!.copyWith(
+                              color: pallete[Pallete.deepNavy],
                             ),
-                          ),
-                          errorBorder: OutlineInputBorder(
-                            borderSide: BorderSide(
-                              color: pallete[Pallete.red01]!,
-                              width: 2,
-                            ),
-                          ),
-                          focusedErrorBorder: OutlineInputBorder(
-                            borderSide: BorderSide(
-                              color: pallete[Pallete.red01]!,
-                              width: 2,
-                            ),
-                          ),
-                          contentPadding: const EdgeInsets.symmetric(
-                            horizontal: 32,
-                            vertical: 16,
-                          ),
-                        ),
-                        keyboardType: TextInputType.text,
-                        style: types[Types.semi_md]!.copyWith(
-                          color: pallete[Pallete.deepNavy],
-                        ),
-                        validator: (value) {
-                          if (value!.isEmpty) {
-                            setState(() {
-                              _invalidWorkoutName = true;
-                            });
-                            return '운동명을 입력해 주세요.';
-                          }
+                            validator: (value) {
+                              if (value!.isEmpty) {
+                                setState(() {
+                                  _invalidWorkoutName = true;
+                                });
+                                return '운동명을 입력해 주세요.';
+                              }
 
-                          setState(() {
-                            _invalidWorkoutName = false;
-                          });
-                          return null;
-                        },
+                              setState(() {
+                                _invalidWorkoutName = false;
+                              });
+                              return null;
+                            },
+                          ),
+                          const SizedBox(height: 32),
+                          Container(
+                            alignment: Alignment.centerRight,
+                            child: TextBtn(
+                              text: '기록 불러오기',
+                              onPressed: () {},
+                              width: 140,
+                              height: 32,
+                              borderRadius: 4,
+                            ),
+                          ),
+                          SetTableForm(
+                            formData: _setTableForm,
+                            invalidSetTable: _invalidSetTable,
+                            addSetTableRow: _addSetTableRow,
+                            removeSetTableRow: _removeSetTableRow,
+                          ),
+                          const SizedBox(height: 40),
+                        ],
                       ),
-                      const SizedBox(height: 32),
-                      Container(
-                        alignment: Alignment.centerRight,
-                        child: TextBtn(
-                          text: '기록 불러오기',
-                          onPressed: () {},
-                          width: 140,
-                          height: 32,
-                          borderRadius: 4,
-                        ),
-                      ),
-                      SetTableForm(
-                        formData: _setTableForm,
-                        invalidSetTable: _invalidSetTable,
-                      ),
-                    ],
+                    ),
                   ),
                 )
               ],
