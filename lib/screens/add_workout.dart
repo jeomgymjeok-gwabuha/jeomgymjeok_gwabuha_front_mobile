@@ -4,7 +4,7 @@ import 'package:jeomgymjeok_gwabuha/design/Pallete.dart';
 import 'package:jeomgymjeok_gwabuha/design/Types.dart';
 import 'package:jeomgymjeok_gwabuha/widgets/common/text_btn.dart';
 import 'package:jeomgymjeok_gwabuha/widgets/date_selector.dart';
-import 'package:jeomgymjeok_gwabuha/widgets/set_table/index.dart';
+import 'package:jeomgymjeok_gwabuha/widgets/set_table_form/index.dart';
 
 class AddWorkout extends StatefulWidget {
   const AddWorkout({
@@ -23,6 +23,13 @@ class _AddWorkoutState extends State<AddWorkout> {
   final _formKey = GlobalKey<FormState>();
   final TextEditingController _textController = TextEditingController();
   bool _invalidWorkoutName = false;
+  final List<Map<String, Object>> setTableForm = [
+    {
+      'sequence': 1,
+      'weight': TextEditingController(),
+      'count': TextEditingController(),
+    }
+  ];
 
   @override
   void initState() {
@@ -158,7 +165,7 @@ class _AddWorkoutState extends State<AddWorkout> {
                           borderRadius: 4,
                         ),
                       ),
-                      const SetTable(),
+                      const SetTableForm(),
                     ],
                   ),
                 )
