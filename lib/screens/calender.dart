@@ -44,6 +44,24 @@ class _CalendarScreenState extends ConsumerState<CalendarScreen> {
     ref.read(dateProvider.notifier).setDate(nextMonth);
   }
 
+  void _addNewWorkout(DateTime selectedDay) async {
+    Map<String, Object>? response =
+        await Navigator.of(context).push(MaterialPageRoute(
+      builder: (ctx) => AddWorkout(selectedDay: selectedDay),
+    ));
+
+    if (response != null) {
+      final recordDate = response['recordDate'] as String;
+      final newWorkoutItem = response['newWorkoutItem'] as MWorkoutItem;
+
+      setState(() {
+        ref
+            .read(workoutProvider.notifier)
+            .addWorkout(recordDate, newWorkoutItem);
+      });
+    }
+  }
+
   get _selectedFormattedDay {
     return DateFormat('yyyy.MM.dd').format(ref.watch(dateProvider));
   }
@@ -88,11 +106,7 @@ class _CalendarScreenState extends ConsumerState<CalendarScreen> {
                     borderRadius: BorderRadius.circular(24),
                   ),
                   child: IconButton(
-                    onPressed: () {
-                      Navigator.of(context).push(MaterialPageRoute(
-                        builder: (ctx) => AddWorkout(selectedDay: _selectedDay),
-                      ));
-                    },
+                    onPressed: () => _addNewWorkout(_selectedDay),
                     icon: SvgPicture.asset(
                       'assets/icons/union.svg',
                     ),

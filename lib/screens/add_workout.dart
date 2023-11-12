@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:intl/intl.dart';
 import 'package:jeomgymjeok_gwabuha/design/Pallete.dart';
 import 'package:jeomgymjeok_gwabuha/design/Types.dart';
 import 'package:jeomgymjeok_gwabuha/models/m_set_table_form_item.dart';
+import 'package:jeomgymjeok_gwabuha/models/m_workout_item.dart';
 import 'package:jeomgymjeok_gwabuha/widgets/common/text_btn.dart';
 import 'package:jeomgymjeok_gwabuha/widgets/date_selector.dart';
 import 'package:jeomgymjeok_gwabuha/widgets/set_table_form/index.dart';
@@ -25,7 +27,7 @@ class _AddWorkoutState extends State<AddWorkout> {
   Map<String, MSetTableFormItem> _invalidSetTable = {};
 
   final _formKey = GlobalKey<FormState>();
-  final TextEditingController _textController = TextEditingController();
+  final TextEditingController _nameController = TextEditingController();
   final List<MSetTableFormItem> _setTableForm = [
     MSetTableFormItem(
       weightController: TextEditingController(),
@@ -84,6 +86,23 @@ class _AddWorkoutState extends State<AddWorkout> {
       });
       return;
     }
+
+    final List<MWorkoutSet> set = _setTableForm.asMap().entries.map((entry) {
+      int sequence = entry.key;
+      int weight = int.parse(entry.value.weightController.text);
+      int count = int.parse(entry.value.countController.text);
+
+      return MWorkoutSet(sequence: sequence, weight: weight, count: count);
+    }).toList();
+
+    String name = _nameController.text;
+    final MWorkoutItem newWorkoutItem = MWorkoutItem(name: name, set: set);
+    final String recordDate = DateFormat('yyyy.MM.dd').format(_recordDate);
+
+    Navigator.of(context).pop({
+      'recordDate': recordDate,
+      'newWorkoutItem': newWorkoutItem,
+    });
   }
 
   @override
@@ -143,7 +162,7 @@ class _AddWorkoutState extends State<AddWorkout> {
                         children: [
                           const SizedBox(height: 40),
                           TextFormField(
-                            controller: _textController,
+                            controller: _nameController,
                             decoration: InputDecoration(
                               labelText: '운동 이름',
                               labelStyle: types[Types.semi_md]!.copyWith(

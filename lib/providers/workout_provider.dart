@@ -10,6 +10,16 @@ class WorkoutNotifier extends StateNotifier<Map<String, List<MWorkoutItem>>> {
           DateFormat('yyyy.MM.dd').format(DateTime.parse('20231101')):
               dummyWorkoutList,
         });
+
+  addWorkout(String recordDate, MWorkoutItem newWorkout) {
+    if (state.containsKey(recordDate)) {
+      state[recordDate]!.add(newWorkout);
+    } else {
+      state[recordDate] = [newWorkout];
+    }
+
+    print(state);
+  }
 }
 
 final workoutProvider =
