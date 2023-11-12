@@ -5,6 +5,7 @@ import 'package:jeomgymjeok_gwabuha/design/Pallete.dart';
 import 'package:jeomgymjeok_gwabuha/design/Types.dart';
 import 'package:jeomgymjeok_gwabuha/models/m_set_table_form_item.dart';
 import 'package:jeomgymjeok_gwabuha/models/m_workout_item.dart';
+import 'package:jeomgymjeok_gwabuha/widgets/bottom_sheets/load_workout_bottom_sheet.dart';
 import 'package:jeomgymjeok_gwabuha/widgets/common/text_btn.dart';
 import 'package:jeomgymjeok_gwabuha/widgets/date_selector.dart';
 import 'package:jeomgymjeok_gwabuha/widgets/set_table_form/index.dart';
@@ -62,6 +63,24 @@ class _AddWorkoutState extends State<AddWorkout> {
     setState(() {
       _recordDate = date;
     });
+  }
+
+  void _openRecordingBottomSheet() {
+    showModalBottomSheet(
+        context: context,
+        shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(12),
+            topRight: Radius.circular(12),
+          ),
+        ),
+        clipBehavior: Clip.hardEdge,
+        builder: (BuildContext context) {
+          return SizedBox(
+            height: 780,
+            child: LoadWorkoutBottomSheet(),
+          );
+        });
   }
 
   void _submit() {
@@ -223,7 +242,7 @@ class _AddWorkoutState extends State<AddWorkout> {
                             alignment: Alignment.centerRight,
                             child: TextBtn(
                               text: '기록 불러오기',
-                              onPressed: () {},
+                              onPressed: _openRecordingBottomSheet,
                               width: 140,
                               height: 32,
                               borderRadius: 4,
