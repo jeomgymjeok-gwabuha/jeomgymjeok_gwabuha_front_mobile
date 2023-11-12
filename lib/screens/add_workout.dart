@@ -88,7 +88,7 @@ class _AddWorkoutState extends State<AddWorkout> {
     }
 
     final List<MWorkoutSet> set = _setTableForm.asMap().entries.map((entry) {
-      int sequence = entry.key;
+      int sequence = entry.key + 1;
       int weight = int.parse(entry.value.weightController.text);
       int count = int.parse(entry.value.countController.text);
 
