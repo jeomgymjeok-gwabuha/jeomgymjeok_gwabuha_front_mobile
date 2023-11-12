@@ -5,7 +5,7 @@ import 'package:jeomgymjeok_gwabuha/design/Pallete.dart';
 import 'package:jeomgymjeok_gwabuha/design/Types.dart';
 import 'package:jeomgymjeok_gwabuha/models/m_set_table_form_item.dart';
 import 'package:jeomgymjeok_gwabuha/models/m_workout_item.dart';
-import 'package:jeomgymjeok_gwabuha/widgets/bottom_sheets/load_workout_bottom_sheet.dart';
+import 'package:jeomgymjeok_gwabuha/widgets/bottom_sheets/load_workout_bottom_sheet/index.dart';
 import 'package:jeomgymjeok_gwabuha/widgets/common/text_btn.dart';
 import 'package:jeomgymjeok_gwabuha/widgets/date_selector.dart';
 import 'package:jeomgymjeok_gwabuha/widgets/set_table_form/index.dart';
