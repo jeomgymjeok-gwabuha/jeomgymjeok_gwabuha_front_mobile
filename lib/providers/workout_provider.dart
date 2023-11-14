@@ -32,3 +32,16 @@ final datedWorkoutProvider = Provider((ref) {
 
   return workout[selectedDate] ?? [];
 });
+
+final workoutNames = Provider((ref) {
+  final workout = ref.watch(workoutProvider);
+  Set<String> names = {};
+
+  workout.forEach((key, value) {
+    for (var item in value) {
+      names.add(item.name);
+    }
+  });
+
+  return names.toList();
+});

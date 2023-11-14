@@ -1,26 +1,46 @@
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:jeomgymjeok_gwabuha/design/Pallete.dart';
 import 'package:jeomgymjeok_gwabuha/design/Types.dart';
+import 'package:jeomgymjeok_gwabuha/providers/workout_provider.dart';
+import 'package:jeomgymjeok_gwabuha/widgets/bottom_sheets/load_workout_bottom_sheet/date_picker.dart';
 import 'package:jeomgymjeok_gwabuha/widgets/common/text_btn.dart';
+import 'package:jeomgymjeok_gwabuha/widgets/vertical_dotted_divider.dart';
 
-const List<String> list = <String>['One', 'Two', 'Three', 'Four'];
+const List<String> options = ['entire', 'select'];
 
-class LoadWorkoutSearchbar extends StatefulWidget {
+class LoadWorkoutSearchbar extends ConsumerStatefulWidget {
   const LoadWorkoutSearchbar({super.key});
 
   @override
-  State<LoadWorkoutSearchbar> createState() => _LoadWorkoutSearchbarState();
+  ConsumerState<LoadWorkoutSearchbar> createState() =>
+      _LoadWorkoutSearchbarState();
 }
 
-class _LoadWorkoutSearchbarState extends State<LoadWorkoutSearchbar> {
-  String dropdownValue = list.first;
+class _LoadWorkoutSearchbarState extends ConsumerState<LoadWorkoutSearchbar> {
+  String selectedOption = options.first;
+  DateTime startTime = DateTime.now();
+  DateTime lastTime = DateTime.now();
+
+  void changeStartTime(DateTime dateTime) {
+    setState(() {
+      startTime = dateTime;
+    });
+  }
+
+  void changeLastTime(DateTime dateTime) {
+    setState(() {
+      lastTime = dateTime;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
     final double fullWidth = MediaQuery.of(context).size.width;
+    final names = ref.watch(workoutNames);
 
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16.0),
@@ -51,6 +71,10 @@ class _LoadWorkoutSearchbarState extends State<LoadWorkoutSearchbar> {
             builder: (context, controller) {
               return SearchBar(
                 controller: controller,
+                textStyle: MaterialStateProperty.resolveWith(
+                  (states) => types[Types.semi_md]!
+                      .copyWith(color: pallete[Pallete.alaskanBlue]!),
+                ),
                 backgroundColor:
                     MaterialStateColor.resolveWith((states) => Colors.white),
                 elevation: MaterialStateProperty.all(0),
@@ -89,13 +113,12 @@ class _LoadWorkoutSearchbarState extends State<LoadWorkoutSearchbar> {
             },
             suggestionsBuilder:
                 (BuildContext context, SearchController controller) {
-              return List<ListTile>.generate(3, (int index) {
-                final String item = 'item $index';
+              return List<ListTile>.generate(names.length, (int index) {
                 return ListTile(
-                  title: Text(item),
+                  title: Text(names[index]),
                   onTap: () {
                     setState(() {
-                      controller.closeView(item);
+                      controller.closeView(names[index]);
                     });
                   },
                 );
@@ -108,11 +131,11 @@ class _LoadWorkoutSearchbarState extends State<LoadWorkoutSearchbar> {
               alignment: Alignment.center,
               isExpanded: true,
               isDense: false,
-              items: list
+              items: options
                   .map((String item) => DropdownMenuItem<String>(
                         value: item,
                         child: Text(
-                          item,
+                          item == 'entire' ? '기간 전체' : '기간 직접 입력',
                           style: types[Types.semi_md]!.copyWith(
                             color: pallete[Pallete.alaskanBlue],
                           ),
@@ -120,10 +143,10 @@ class _LoadWorkoutSearchbarState extends State<LoadWorkoutSearchbar> {
                         ),
                       ))
                   .toList(),
-              value: dropdownValue,
+              value: selectedOption,
               onChanged: (String? value) {
                 setState(() {
-                  dropdownValue = value!;
+                  selectedOption = value!;
                 });
               },
               buttonStyleData: ButtonStyleData(
@@ -174,7 +197,7 @@ class _LoadWorkoutSearchbarState extends State<LoadWorkoutSearchbar> {
                       bottom: 10,
                     ),
                     child: Text(
-                      dropdownValue,
+                      selectedOption == 'entire' ? '기간 전체' : '기간 직접 입력',
                       style: types[Types.semi_md]!.copyWith(
                         color: pallete[Pallete.white],
                       ),
@@ -184,6 +207,38 @@ class _LoadWorkoutSearchbarState extends State<LoadWorkoutSearchbar> {
               ),
             ),
           ),
+          if (selectedOption == 'select')
+            Column(
+              children: [
+                const SizedBox(height: 12),
+                Row(
+                  children: [
+                    Expanded(
+                      child: DatePicker(
+                        initialTime: startTime,
+                        changeDateTime: changeStartTime,
+                      ),
+                    ),
+                    SizedBox(
+                      width: 32,
+                      height: 40,
+                      child: Center(
+                        child: Container(
+                            width: 8,
+                            height: 1,
+                            color: pallete[Pallete.deepNavy]!),
+                      ),
+                    ),
+                    Expanded(
+                      child: DatePicker(
+                        initialTime: lastTime,
+                        changeDateTime: changeLastTime,
+                      ),
+                    )
+                  ],
+                ),
+              ],
+            ),
           const SizedBox(height: 12),
           TextBtn(
             text: '검색하기',
