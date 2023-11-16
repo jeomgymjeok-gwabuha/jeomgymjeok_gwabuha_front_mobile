@@ -2,17 +2,23 @@ import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:intl/intl.dart';
 import 'package:jeomgymjeok_gwabuha/design/Pallete.dart';
 import 'package:jeomgymjeok_gwabuha/design/Types.dart';
+import 'package:jeomgymjeok_gwabuha/models/m_importing_workout_item.dart';
 import 'package:jeomgymjeok_gwabuha/providers/workout_provider.dart';
 import 'package:jeomgymjeok_gwabuha/widgets/bottom_sheets/load_workout_bottom_sheet/date_picker.dart';
 import 'package:jeomgymjeok_gwabuha/widgets/common/text_btn.dart';
-import 'package:jeomgymjeok_gwabuha/widgets/vertical_dotted_divider.dart';
 
 const List<String> options = ['entire', 'select'];
 
 class LoadWorkoutSearchbar extends ConsumerStatefulWidget {
-  const LoadWorkoutSearchbar({super.key});
+  const LoadWorkoutSearchbar({
+    super.key,
+    required this.searchWorkout,
+  });
+
+  final void Function(List<MImportingWorkoutItem> list) searchWorkout;
 
   @override
   ConsumerState<LoadWorkoutSearchbar> createState() =>
@@ -20,9 +26,11 @@ class LoadWorkoutSearchbar extends ConsumerStatefulWidget {
 }
 
 class _LoadWorkoutSearchbarState extends ConsumerState<LoadWorkoutSearchbar> {
+  final SearchController _searchController = SearchController();
   String selectedOption = options.first;
   DateTime startTime = DateTime.now();
   DateTime lastTime = DateTime.now();
+  bool isInvalidName = false;
 
   void changeStartTime(DateTime dateTime) {
     setState(() {
@@ -34,6 +42,38 @@ class _LoadWorkoutSearchbarState extends ConsumerState<LoadWorkoutSearchbar> {
     setState(() {
       lastTime = dateTime;
     });
+  }
+
+  void submit() {
+    setState(() {
+      isInvalidName = false;
+    });
+
+    if (_searchController.text.isEmpty) {
+      setState(() {
+        isInvalidName = true;
+      });
+
+      return;
+    }
+
+    final workoutList = ref.watch(filteredWorkoutProvider);
+    List<MImportingWorkoutItem> list = [];
+
+    if (selectedOption == 'entire') {
+      list = workoutList[_searchController.text] ?? [];
+    } else {
+      list = (workoutList[_searchController.text] ?? []).where((element) {
+        DateTime date = DateFormat('yyyy.MM.dd').parse(element.dateTime);
+        bool isStart =
+            date.isAtSameMomentAs(startTime) || date.isAfter(startTime);
+        bool isEnd = date.isBefore(lastTime);
+
+        return isStart && isEnd;
+      }).toList();
+    }
+
+    widget.searchWorkout(list);
   }
 
   @override
@@ -63,6 +103,7 @@ class _LoadWorkoutSearchbarState extends ConsumerState<LoadWorkoutSearchbar> {
             ),
           ),
           SearchAnchor(
+            searchController: _searchController,
             viewConstraints: const BoxConstraints(minHeight: 44, maxHeight: 44),
             viewHintText: '운동 이름을 검색해주세요.',
             headerTextStyle: types[Types.semi_md]!.copyWith(
@@ -86,13 +127,17 @@ class _LoadWorkoutSearchbarState extends ConsumerState<LoadWorkoutSearchbar> {
                 side: MaterialStateProperty.resolveWith((states) {
                   return BorderSide(
                     width: 1,
-                    color: pallete[Pallete.deepNavy]!,
+                    color: isInvalidName
+                        ? pallete[Pallete.red02]!
+                        : pallete[Pallete.deepNavy]!,
                   );
                 }),
                 hintText: '운동 이름을 검색해주세요.',
                 hintStyle: MaterialStateProperty.resolveWith(
                   (states) => types[Types.semi_md]!.copyWith(
-                    color: pallete[Pallete.alaskanBlue],
+                    color: isInvalidName
+                        ? pallete[Pallete.red02]
+                        : pallete[Pallete.alaskanBlue],
                   ),
                 ),
                 constraints: const BoxConstraints(
@@ -108,7 +153,9 @@ class _LoadWorkoutSearchbarState extends ConsumerState<LoadWorkoutSearchbar> {
                 onChanged: (_) {
                   controller.openView();
                 },
-                leading: SvgPicture.asset('assets/icons/search.svg'),
+                leading: isInvalidName
+                    ? SvgPicture.asset('assets/icons/error_search.svg')
+                    : SvgPicture.asset('assets/icons/search.svg'),
               );
             },
             suggestionsBuilder:
@@ -242,7 +289,7 @@ class _LoadWorkoutSearchbarState extends ConsumerState<LoadWorkoutSearchbar> {
           const SizedBox(height: 12),
           TextBtn(
             text: '검색하기',
-            onPressed: () {},
+            onPressed: submit,
             width: double.infinity,
             height: 56,
           ),

@@ -68,6 +68,7 @@ class _AddWorkoutState extends State<AddWorkout> {
   void _openRecordingBottomSheet() {
     showModalBottomSheet(
         context: context,
+        isScrollControlled: true,
         shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.only(
             topLeft: Radius.circular(12),
@@ -76,9 +77,11 @@ class _AddWorkoutState extends State<AddWorkout> {
         ),
         clipBehavior: Clip.hardEdge,
         builder: (BuildContext context) {
+          final fullHeight = MediaQuery.of(context).size.height;
+
           return SizedBox(
-            height: 780,
-            child: LoadWorkoutBottomSheet(),
+            height: fullHeight * 0.75,
+            child: const LoadWorkoutBottomSheet(),
           );
         });
   }

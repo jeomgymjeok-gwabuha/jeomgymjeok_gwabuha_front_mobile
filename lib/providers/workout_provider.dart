@@ -1,6 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:jeomgymjeok_gwabuha/data/dummy_workout_list.dart';
+import 'package:jeomgymjeok_gwabuha/models/m_importing_workout_item.dart';
 import 'package:jeomgymjeok_gwabuha/models/m_workout_item.dart';
 import 'package:jeomgymjeok_gwabuha/providers/date_provider.dart';
 
@@ -8,6 +9,10 @@ class WorkoutNotifier extends StateNotifier<Map<String, List<MWorkoutItem>>> {
   WorkoutNotifier()
       : super({
           DateFormat('yyyy.MM.dd').format(DateTime.parse('20231101')):
+              dummyWorkoutList,
+          DateFormat('yyyy.MM.dd').format(DateTime.parse('20231110')):
+              dummyWorkoutList,
+          DateFormat('yyyy.MM.dd').format(DateTime.parse('20231111')):
               dummyWorkoutList,
         });
 
@@ -17,8 +22,6 @@ class WorkoutNotifier extends StateNotifier<Map<String, List<MWorkoutItem>>> {
     } else {
       state[recordDate] = [newWorkout];
     }
-
-    print(state);
   }
 }
 
@@ -44,4 +47,22 @@ final workoutNames = Provider((ref) {
   });
 
   return names.toList();
+});
+
+final filteredWorkoutProvider = Provider((ref) {
+  final workout = ref.watch(workoutProvider);
+  final Map<String, List<MImportingWorkoutItem>> map = {};
+
+  workout.forEach((key, value) {
+    for (var item in value) {
+      if (map.containsKey(item.name)) {
+        map[item.name]!
+            .add(MImportingWorkoutItem(dateTime: key, set: item.set));
+      } else {
+        map[item.name] = [MImportingWorkoutItem(dateTime: key, set: item.set)];
+      }
+    }
+  });
+
+  return map;
 });
