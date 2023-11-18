@@ -10,10 +10,12 @@ class WorkoutItemHeaderDeleteBar extends StatefulWidget {
     super.key,
     required this.hidden,
     required this.toggleDeleteBar,
+    required this.deleteWorkout,
   });
 
   final bool hidden;
   final void Function(bool value) toggleDeleteBar;
+  final void Function() deleteWorkout;
 
   @override
   State<WorkoutItemHeaderDeleteBar> createState() =>
@@ -123,6 +125,7 @@ class _WorkoutItemHeaderDeleteBarState
         );
 
         if (result != null && result == true) {
+          widget.deleteWorkout();
           widget.toggleDeleteBar(false);
         }
       }

@@ -1,15 +1,115 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:jeomgymjeok_gwabuha/design/Pallete.dart';
 import 'package:jeomgymjeok_gwabuha/design/Types.dart';
+import 'package:jeomgymjeok_gwabuha/widgets/common/text_btn.dart';
 
-class WorkoutController extends StatelessWidget {
-  const WorkoutController({super.key});
+class WorkoutController extends StatefulWidget {
+  const WorkoutController({
+    super.key,
+    required this.deleteWorkout,
+  });
+
+  final void Function() deleteWorkout;
+
+  @override
+  State<WorkoutController> createState() => _WorkoutControllerState();
+}
+
+class _WorkoutControllerState extends State<WorkoutController> {
+  void onClickDeleteBtn() async {
+    var result = await showDialog(
+      context: context,
+      builder: (context) {
+        final double paddingBottom = Platform.isIOS ? 120 : 104;
+
+        return AlertDialog(
+          insetPadding: EdgeInsets.only(
+            top: 0,
+            bottom: paddingBottom,
+            left: 0,
+            right: 0,
+          ),
+          backgroundColor: Colors.transparent,
+          alignment: Alignment.bottomCenter,
+          shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(
+              Radius.circular(10.0),
+            ),
+          ),
+          content: Builder(
+            builder: (context) {
+              final width = MediaQuery.of(context).size.width;
+
+              return IntrinsicHeight(
+                child: SizedBox(
+                  width: double.infinity,
+                  child: Column(
+                    children: [
+                      Container(
+                        width: width,
+                        height: 128,
+                        decoration: BoxDecoration(
+                          color: pallete[Pallete.deepNavy],
+                          borderRadius: BorderRadius.circular(14),
+                        ),
+                        child: Column(
+                          children: [
+                            Expanded(
+                              child: Center(
+                                child: Text(
+                                  '해당 운동 기록을 삭제하시겠습니까?',
+                                  style: types[Types.semi_md]!.copyWith(
+                                    color: pallete[Pallete.white],
+                                  ),
+                                ),
+                              ),
+                            ),
+                            Container(
+                              width: width,
+                              height: 0.5,
+                              color: pallete[Pallete.white]!.withOpacity(0.24),
+                            ),
+                            TextBtn(
+                                text: '삭제',
+                                width: width,
+                                height: 52,
+                                textColor: Pallete.red01,
+                                onPressed: () {
+                                  Navigator.of(context).pop(true);
+                                }),
+                          ],
+                        ),
+                      ),
+                      const SizedBox(height: 12),
+                      TextBtn(
+                        text: '취소',
+                        width: width,
+                        height: 52,
+                        textColor: Pallete.flash,
+                        onPressed: () {
+                          Navigator.of(context).pop(false);
+                        },
+                      ),
+                    ],
+                  ),
+                ),
+              );
+            },
+          ),
+        );
+      },
+    );
+
+    if (result != null && result == true) {
+      widget.deleteWorkout();
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
     return Container(
-      // padding: const EdgeInsets.only(top: 29, bottom: 40, left: 12, right: 12),
       color: pallete[Pallete.alaskanBlue],
       child: Stack(
         children: [
@@ -22,7 +122,7 @@ class WorkoutController extends StatelessWidget {
                   child: Container(
                     height: 56,
                     child: ElevatedButton(
-                      onPressed: () {},
+                      onPressed: onClickDeleteBtn,
                       style: ElevatedButton.styleFrom(
                           foregroundColor: pallete[Pallete.white],
                           backgroundColor: pallete[Pallete.red02],

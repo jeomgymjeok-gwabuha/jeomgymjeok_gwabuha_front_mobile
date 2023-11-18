@@ -62,6 +62,15 @@ class _CalendarScreenState extends ConsumerState<CalendarScreen> {
     }
   }
 
+  void _deleteWorkout(String id) {
+    DateTime _selectedDay = ref.watch(dateProvider);
+    final recordDate = DateFormat('yyyy.MM.dd').format(_selectedDay);
+
+    setState(() {
+      ref.read(workoutProvider.notifier).deleteWorkout(recordDate, id);
+    });
+  }
+
   get _selectedFormattedDay {
     return DateFormat('yyyy.MM.dd').format(ref.watch(dateProvider));
   }
@@ -82,6 +91,7 @@ class _CalendarScreenState extends ConsumerState<CalendarScreen> {
                 Expanded(
                   child: WorkoutList(
                     list: _workout[_selectedFormattedDay] ?? [],
+                    deleteWorkout: _deleteWorkout,
                   ),
                 ),
               ],

@@ -8,9 +8,11 @@ class WorkoutList extends StatelessWidget {
   const WorkoutList({
     super.key,
     required this.list,
+    required this.deleteWorkout,
   });
 
   final List<MWorkoutItem> list;
+  final void Function(String id) deleteWorkout;
 
   @override
   Widget build(BuildContext context) {
@@ -38,7 +40,9 @@ class WorkoutList extends StatelessWidget {
             child: ListView.separated(
               itemCount: list.length,
               itemBuilder: (context, index) => WorkoutItem(
+                key: ValueKey(list[index].id),
                 workout: list[index],
+                deleteWorkout: deleteWorkout,
               ),
               separatorBuilder: (context, index) => const SizedBox(
                 height: 2,

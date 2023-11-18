@@ -9,9 +9,12 @@ class WorkoutItemContent extends StatelessWidget {
     super.key,
     required this.heightFactor,
     required this.set,
+    required this.deleteWorkout,
   });
+
   final Animation<double> heightFactor;
   final List<MWorkoutSet> set;
+  final void Function() deleteWorkout;
 
   @override
   Widget build(BuildContext context) {
@@ -70,7 +73,9 @@ class WorkoutItemContent extends StatelessWidget {
               ),
             )
             .toList(),
-        const WorkoutController(),
+        WorkoutController(
+          deleteWorkout: deleteWorkout,
+        ),
       ]),
     );
   }

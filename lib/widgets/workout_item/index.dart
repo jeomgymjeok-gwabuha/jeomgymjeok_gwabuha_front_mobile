@@ -7,9 +7,11 @@ class WorkoutItem extends StatefulWidget {
   const WorkoutItem({
     super.key,
     required this.workout,
+    required this.deleteWorkout,
   });
 
   final MWorkoutItem workout;
+  final void Function(String id) deleteWorkout;
 
   @override
   State<WorkoutItem> createState() => _WorkoutItemState();
@@ -20,6 +22,7 @@ class _WorkoutItemState extends State<WorkoutItem>
   var _isExpanded = false;
   late AnimationController _animationController;
   late Animation<double> _heightFactor;
+  bool _isDisplayDeleteButton = false;
 
   void _onTapHeader() {
     setState(() {
@@ -30,6 +33,12 @@ class _WorkoutItemState extends State<WorkoutItem>
       } else {
         _animationController.reverse();
       }
+    });
+  }
+
+  void _toggleDeleteBar(bool value) {
+    setState(() {
+      _isDisplayDeleteButton = value;
     });
   }
 
@@ -60,10 +69,14 @@ class _WorkoutItemState extends State<WorkoutItem>
           name: widget.workout.name,
           totalSetCount: widget.workout.set.length,
           onTapHeader: _onTapHeader,
+          isDisplayDeleteButton: _isDisplayDeleteButton,
+          toggleDeleteBar: _toggleDeleteBar,
+          deleteWorkout: () => widget.deleteWorkout(widget.workout.id),
         ),
         WorkoutItemContent(
           heightFactor: _heightFactor,
           set: widget.workout.set,
+          deleteWorkout: () => widget.deleteWorkout(widget.workout.id),
         ),
       ],
     );

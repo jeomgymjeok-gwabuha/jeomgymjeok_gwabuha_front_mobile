@@ -9,29 +9,27 @@ class WorkoutItemHeader extends StatefulWidget {
     required this.isExpanded,
     required this.name,
     required this.totalSetCount,
+    required this.isDisplayDeleteButton,
+    required this.deleteWorkout,
+    required this.toggleDeleteBar,
   });
 
   final void Function() onTapHeader;
   final bool isExpanded;
   final String name;
   final int totalSetCount;
+  final bool isDisplayDeleteButton;
+  final void Function() deleteWorkout;
+  final void Function(bool value) toggleDeleteBar;
 
   @override
   State<WorkoutItemHeader> createState() => _WorkoutItemHeaderState();
 }
 
 class _WorkoutItemHeaderState extends State<WorkoutItemHeader> {
-  bool isDisplayDeleteButton = false;
-
   @override
   Widget build(BuildContext context) {
     final double fullWidth = MediaQuery.of(context).size.width;
-
-    void _toggleDeleteBar(bool value) {
-      setState(() {
-        isDisplayDeleteButton = value;
-      });
-    }
 
     return SizedBox(
       width: fullWidth,
@@ -46,16 +44,17 @@ class _WorkoutItemHeaderState extends State<WorkoutItemHeader> {
               name: widget.name,
               totalSetCount: widget.totalSetCount,
               isExpanded: widget.isExpanded,
-              isDisplayDeleteButton: isDisplayDeleteButton,
-              toggleDeleteBar: _toggleDeleteBar,
+              isDisplayDeleteButton: widget.isDisplayDeleteButton,
+              toggleDeleteBar: widget.toggleDeleteBar,
             ),
           ),
           Positioned(
             right: 0,
             bottom: 0,
             child: WorkoutItemHeaderDeleteBar(
-              hidden: isDisplayDeleteButton,
-              toggleDeleteBar: _toggleDeleteBar,
+              hidden: widget.isDisplayDeleteButton,
+              toggleDeleteBar: widget.toggleDeleteBar,
+              deleteWorkout: widget.deleteWorkout,
             ),
           )
         ],
