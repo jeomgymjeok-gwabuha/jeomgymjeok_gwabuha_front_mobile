@@ -23,6 +23,7 @@ class _WorkoutItemState extends State<WorkoutItem>
   late AnimationController _animationController;
   late Animation<double> _heightFactor;
   bool _isDisplayDeleteButton = false;
+  bool _isEditingMode = false;
 
   void _onTapHeader() {
     setState(() {

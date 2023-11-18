@@ -65,16 +65,37 @@ class _WorkoutItemHeaderTitleBarState extends State<WorkoutItemHeaderTitleBar> {
                   duration: const Duration(milliseconds: 150),
                   curve: Curves.easeInOut,
                   height: 80,
-                  padding: const EdgeInsets.only(left: 52, right: 51),
+                  padding: const EdgeInsets.only(left: 22, right: 51),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      Text(
-                        widget.name,
-                        style: types[Types.semi_lg]!.copyWith(
-                          color: pallete[Pallete.white],
-                        ),
+                      Row(
+                        children: [
+                          Radio(
+                            visualDensity: const VisualDensity(
+                              horizontal: VisualDensity.minimumDensity,
+                              vertical: VisualDensity.minimumDensity,
+                            ),
+                            materialTapTargetSize:
+                                MaterialTapTargetSize.shrinkWrap,
+                            focusColor: pallete[Pallete.flash]!,
+                            activeColor: pallete[Pallete.flash]!,
+                            fillColor: MaterialStateProperty.resolveWith(
+                              (states) => pallete[Pallete.white]!,
+                            ),
+                            value: '',
+                            groupValue: 'a',
+                            onChanged: (value) {},
+                          ),
+                          const SizedBox(width: 8),
+                          Text(
+                            widget.name,
+                            style: types[Types.semi_lg]!.copyWith(
+                              color: pallete[Pallete.white],
+                            ),
+                          ),
+                        ],
                       ),
                       Text(
                         '${widget.totalSetCount}Set',
