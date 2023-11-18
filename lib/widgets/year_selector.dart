@@ -5,6 +5,7 @@ import 'package:jeomgymjeok_gwabuha/design/Pallete.dart';
 import 'package:jeomgymjeok_gwabuha/design/Types.dart';
 import 'package:jeomgymjeok_gwabuha/widgets/dialogs/select_year_dialog.dart';
 
+// ignore: must_be_immutable
 class YearSelector extends StatefulWidget {
   YearSelector({
     super.key,

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:jeomgymjeok_gwabuha/design/Pallete.dart';
 import 'package:jeomgymjeok_gwabuha/widgets/calendar.dart';
 import 'package:jeomgymjeok_gwabuha/widgets/year_selector.dart';
 import 'package:table_calendar/table_calendar.dart';

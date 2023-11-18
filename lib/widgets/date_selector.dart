@@ -5,6 +5,7 @@ import 'package:jeomgymjeok_gwabuha/design/Pallete.dart';
 import 'package:jeomgymjeok_gwabuha/design/Types.dart';
 import 'package:jeomgymjeok_gwabuha/widgets/dialogs/select_date_dialog.dart';
 
+// ignore: must_be_immutable
 class DateSelector extends StatefulWidget {
   DateSelector({
     super.key,
