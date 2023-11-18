@@ -22,7 +22,7 @@ class TextBtn extends StatelessWidget {
   final Pallete? backgroundColor;
   final Pallete? textColor;
 
-  final void Function() onPressed;
+  final void Function()? onPressed;
 
   @override
   Widget build(BuildContext context) {

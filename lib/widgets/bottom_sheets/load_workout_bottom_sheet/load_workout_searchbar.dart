@@ -2,7 +2,6 @@ import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:intl/intl.dart';
 import 'package:jeomgymjeok_gwabuha/design/Pallete.dart';
 import 'package:jeomgymjeok_gwabuha/design/Types.dart';
 import 'package:jeomgymjeok_gwabuha/models/m_importing_workout_item.dart';
@@ -15,10 +14,31 @@ const List<String> options = ['entire', 'select'];
 class LoadWorkoutSearchbar extends ConsumerStatefulWidget {
   const LoadWorkoutSearchbar({
     super.key,
+    required this.isInvalidName,
+    required this.selectedOption,
+    required this.searchController,
+    required this.changeStartTime,
+    required this.startTime,
+    required this.lastTime,
+    required this.changeLastTime,
     required this.searchWorkout,
+    required this.selectOption,
+    required this.submit,
+    required this.reset,
   });
 
+  final bool isInvalidName;
+  final String selectedOption;
+  final SearchController searchController;
+  final DateTime startTime;
+  final DateTime lastTime;
+
+  final void Function(DateTime dateTime) changeStartTime;
+  final void Function(DateTime dateTime) changeLastTime;
   final void Function(List<MImportingWorkoutItem> list) searchWorkout;
+  final void Function(String? value) selectOption;
+  final void Function() submit;
+  final void Function() reset;
 
   @override
   ConsumerState<LoadWorkoutSearchbar> createState() =>
@@ -26,59 +46,8 @@ class LoadWorkoutSearchbar extends ConsumerStatefulWidget {
 }
 
 class _LoadWorkoutSearchbarState extends ConsumerState<LoadWorkoutSearchbar> {
-  final SearchController _searchController = SearchController();
-  String selectedOption = options.first;
-  DateTime startTime = DateTime.now();
-  DateTime lastTime = DateTime.now();
-  bool isInvalidName = false;
-
-  void changeStartTime(DateTime dateTime) {
-    setState(() {
-      startTime = dateTime;
-    });
-  }
-
-  void changeLastTime(DateTime dateTime) {
-    setState(() {
-      lastTime = dateTime;
-    });
-  }
-
-  void submit() {
-    setState(() {
-      isInvalidName = false;
-    });
-
-    if (_searchController.text.isEmpty) {
-      setState(() {
-        isInvalidName = true;
-      });
-
-      return;
-    }
-
-    final workoutList = ref.watch(filteredWorkoutProvider);
-    List<MImportingWorkoutItem> list = [];
-
-    if (selectedOption == 'entire') {
-      list = workoutList[_searchController.text] ?? [];
-    } else {
-      list = (workoutList[_searchController.text] ?? []).where((element) {
-        DateTime date = DateFormat('yyyy.MM.dd').parse(element.dateTime);
-        bool isStart =
-            date.isAtSameMomentAs(startTime) || date.isAfter(startTime);
-        bool isEnd = date.isBefore(lastTime);
-
-        return isStart && isEnd;
-      }).toList();
-    }
-
-    widget.searchWorkout(list);
-  }
-
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
     final double fullWidth = MediaQuery.of(context).size.width;
     final names = ref.watch(workoutNames);
 
@@ -90,7 +59,8 @@ class _LoadWorkoutSearchbarState extends ConsumerState<LoadWorkoutSearchbar> {
             width: double.infinity,
             alignment: Alignment.centerLeft,
             padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
-            child: Column(
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
                   '운동 검색',
@@ -99,11 +69,27 @@ class _LoadWorkoutSearchbarState extends ConsumerState<LoadWorkoutSearchbar> {
                   ),
                   textAlign: TextAlign.left,
                 ),
+                TextButton(
+                    onPressed: widget.reset,
+                    child: Row(
+                      children: [
+                        Text(
+                          '초기화',
+                          style: types[Types.semi_md]!.copyWith(
+                            color: pallete[Pallete.deepNavy],
+                          ),
+                          textAlign: TextAlign.left,
+                        ),
+                        SvgPicture.asset(
+                          'assets/icons/recycle.svg',
+                        ),
+                      ],
+                    )),
               ],
             ),
           ),
           SearchAnchor(
-            searchController: _searchController,
+            searchController: widget.searchController,
             viewConstraints: const BoxConstraints(minHeight: 44, maxHeight: 44),
             viewHintText: '운동 이름을 검색해주세요.',
             headerTextStyle: types[Types.semi_md]!.copyWith(
@@ -127,7 +113,7 @@ class _LoadWorkoutSearchbarState extends ConsumerState<LoadWorkoutSearchbar> {
                 side: MaterialStateProperty.resolveWith((states) {
                   return BorderSide(
                     width: 1,
-                    color: isInvalidName
+                    color: widget.isInvalidName
                         ? pallete[Pallete.red02]!
                         : pallete[Pallete.deepNavy]!,
                   );
@@ -135,7 +121,7 @@ class _LoadWorkoutSearchbarState extends ConsumerState<LoadWorkoutSearchbar> {
                 hintText: '운동 이름을 검색해주세요.',
                 hintStyle: MaterialStateProperty.resolveWith(
                   (states) => types[Types.semi_md]!.copyWith(
-                    color: isInvalidName
+                    color: widget.isInvalidName
                         ? pallete[Pallete.red02]
                         : pallete[Pallete.alaskanBlue],
                   ),
@@ -153,7 +139,7 @@ class _LoadWorkoutSearchbarState extends ConsumerState<LoadWorkoutSearchbar> {
                 onChanged: (_) {
                   controller.openView();
                 },
-                leading: isInvalidName
+                leading: widget.isInvalidName
                     ? SvgPicture.asset('assets/icons/error_search.svg')
                     : SvgPicture.asset('assets/icons/search.svg'),
               );
@@ -190,12 +176,8 @@ class _LoadWorkoutSearchbarState extends ConsumerState<LoadWorkoutSearchbar> {
                         ),
                       ))
                   .toList(),
-              value: selectedOption,
-              onChanged: (String? value) {
-                setState(() {
-                  selectedOption = value!;
-                });
-              },
+              value: widget.selectedOption,
+              onChanged: widget.selectOption,
               buttonStyleData: ButtonStyleData(
                 height: 44,
                 width: double.infinity,
@@ -244,7 +226,7 @@ class _LoadWorkoutSearchbarState extends ConsumerState<LoadWorkoutSearchbar> {
                       bottom: 10,
                     ),
                     child: Text(
-                      selectedOption == 'entire' ? '기간 전체' : '기간 직접 입력',
+                      widget.selectedOption == 'entire' ? '기간 전체' : '기간 직접 입력',
                       style: types[Types.semi_md]!.copyWith(
                         color: pallete[Pallete.white],
                       ),
@@ -254,7 +236,7 @@ class _LoadWorkoutSearchbarState extends ConsumerState<LoadWorkoutSearchbar> {
               ),
             ),
           ),
-          if (selectedOption == 'select')
+          if (widget.selectedOption == 'select')
             Column(
               children: [
                 const SizedBox(height: 12),
@@ -262,8 +244,8 @@ class _LoadWorkoutSearchbarState extends ConsumerState<LoadWorkoutSearchbar> {
                   children: [
                     Expanded(
                       child: DatePicker(
-                        initialTime: startTime,
-                        changeDateTime: changeStartTime,
+                        initialTime: widget.startTime,
+                        changeDateTime: widget.changeStartTime,
                       ),
                     ),
                     SizedBox(
@@ -278,8 +260,8 @@ class _LoadWorkoutSearchbarState extends ConsumerState<LoadWorkoutSearchbar> {
                     ),
                     Expanded(
                       child: DatePicker(
-                        initialTime: lastTime,
-                        changeDateTime: changeLastTime,
+                        initialTime: widget.lastTime,
+                        changeDateTime: widget.changeLastTime,
                       ),
                     )
                   ],
@@ -289,7 +271,7 @@ class _LoadWorkoutSearchbarState extends ConsumerState<LoadWorkoutSearchbar> {
           const SizedBox(height: 12),
           TextBtn(
             text: '검색하기',
-            onPressed: submit,
+            onPressed: widget.submit,
             width: double.infinity,
             height: 56,
           ),

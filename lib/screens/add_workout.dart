@@ -3,6 +3,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:intl/intl.dart';
 import 'package:jeomgymjeok_gwabuha/design/Pallete.dart';
 import 'package:jeomgymjeok_gwabuha/design/Types.dart';
+import 'package:jeomgymjeok_gwabuha/models/m_importing_workout_item.dart';
 import 'package:jeomgymjeok_gwabuha/models/m_set_table_form_item.dart';
 import 'package:jeomgymjeok_gwabuha/models/m_workout_item.dart';
 import 'package:jeomgymjeok_gwabuha/widgets/bottom_sheets/load_workout_bottom_sheet/index.dart';
@@ -29,7 +30,7 @@ class _AddWorkoutState extends State<AddWorkout> {
 
   final _formKey = GlobalKey<FormState>();
   final TextEditingController _nameController = TextEditingController();
-  final List<MSetTableFormItem> _setTableForm = [
+  List<MSetTableFormItem> _setTableForm = [
     MSetTableFormItem(
       weightController: TextEditingController(),
       countController: TextEditingController(),
@@ -65,25 +66,40 @@ class _AddWorkoutState extends State<AddWorkout> {
     });
   }
 
-  void _openRecordingBottomSheet() {
-    showModalBottomSheet(
-        context: context,
-        isScrollControlled: true,
-        shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.only(
-            topLeft: Radius.circular(12),
-            topRight: Radius.circular(12),
-          ),
+  void _openRecordingBottomSheet() async {
+    final response = await showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(12),
+          topRight: Radius.circular(12),
         ),
-        clipBehavior: Clip.hardEdge,
-        builder: (BuildContext context) {
-          final fullHeight = MediaQuery.of(context).size.height;
+      ),
+      clipBehavior: Clip.hardEdge,
+      builder: (BuildContext context) {
+        final fullHeight = MediaQuery.of(context).size.height;
 
-          return SizedBox(
-            height: fullHeight * 0.75,
-            child: const LoadWorkoutBottomSheet(),
-          );
-        });
+        return SizedBox(
+          height: fullHeight * 0.9,
+          child: const LoadWorkoutBottomSheet(),
+        );
+      },
+    );
+
+    if (response is MImportingWorkoutItem) {
+      setState(() {
+        _nameController.text = response.name;
+        _setTableForm = response.set
+            .map(
+              (item) => MSetTableFormItem(
+                weightController: TextEditingController(text: '${item.weight}'),
+                countController: TextEditingController(text: '${item.count}'),
+              ),
+            )
+            .toList();
+      });
+    }
   }
 
   void _submit() {

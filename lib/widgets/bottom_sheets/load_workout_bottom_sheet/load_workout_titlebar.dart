@@ -30,7 +30,9 @@ class LoadWorkoutTitlebar extends StatelessWidget {
             child: IconButton(
               highlightColor: Colors.transparent,
               splashColor: Colors.transparent,
-              onPressed: () {},
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
               icon: SvgPicture.asset('assets/icons/close.svg'),
             ),
           )

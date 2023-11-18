@@ -56,10 +56,12 @@ final filteredWorkoutProvider = Provider((ref) {
   workout.forEach((key, value) {
     for (var item in value) {
       if (map.containsKey(item.name)) {
-        map[item.name]!
-            .add(MImportingWorkoutItem(dateTime: key, set: item.set));
+        map[item.name]!.add(MImportingWorkoutItem(
+            dateTime: key, set: item.set, name: item.name));
       } else {
-        map[item.name] = [MImportingWorkoutItem(dateTime: key, set: item.set)];
+        map[item.name] = [
+          MImportingWorkoutItem(dateTime: key, set: item.set, name: item.name)
+        ];
       }
     }
   });
