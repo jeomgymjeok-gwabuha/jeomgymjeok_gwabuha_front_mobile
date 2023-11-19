@@ -6,19 +6,27 @@ class WorkoutItemHeaderTitleBar extends StatefulWidget {
   const WorkoutItemHeaderTitleBar({
     super.key,
     required this.onTapHeader,
+    required this.id,
     required this.name,
     required this.totalSetCount,
     required this.isExpanded,
     required this.isDisplayDeleteButton,
     required this.toggleDeleteBar,
+    required this.groupValue,
+    required this.reserveDeleteingWorkout,
+    required this.isEditingMode,
   });
 
   final void Function() onTapHeader;
   final void Function(bool value) toggleDeleteBar;
+  final void Function() reserveDeleteingWorkout;
+  final String id;
   final String name;
   final int totalSetCount;
   final bool isExpanded;
   final bool isDisplayDeleteButton;
+  final String groupValue;
+  final bool isEditingMode;
 
   @override
   State<WorkoutItemHeaderTitleBar> createState() =>
@@ -65,29 +73,36 @@ class _WorkoutItemHeaderTitleBarState extends State<WorkoutItemHeaderTitleBar> {
                   duration: const Duration(milliseconds: 150),
                   curve: Curves.easeInOut,
                   height: 80,
-                  padding: const EdgeInsets.only(left: 22, right: 51),
+                  padding: EdgeInsets.only(
+                      left: widget.isEditingMode ? 22 : 51, right: 51),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       Row(
                         children: [
-                          Radio(
-                            visualDensity: const VisualDensity(
-                              horizontal: VisualDensity.minimumDensity,
-                              vertical: VisualDensity.minimumDensity,
+                          if (widget.isEditingMode)
+                            Radio(
+                              toggleable: true,
+                              visualDensity: const VisualDensity(
+                                horizontal: VisualDensity.minimumDensity,
+                                vertical: VisualDensity.minimumDensity,
+                              ),
+                              materialTapTargetSize:
+                                  MaterialTapTargetSize.shrinkWrap,
+                              fillColor: MaterialStateProperty.resolveWith(
+                                (states) => widget.groupValue == widget.id
+                                    ? pallete[Pallete.flash]
+                                    : pallete[Pallete.white]!,
+                              ),
+                              value: widget.id,
+                              groupValue: widget.groupValue,
+                              onChanged: (value) {
+                                setState(() {
+                                  widget.reserveDeleteingWorkout();
+                                });
+                              },
                             ),
-                            materialTapTargetSize:
-                                MaterialTapTargetSize.shrinkWrap,
-                            focusColor: pallete[Pallete.flash]!,
-                            activeColor: pallete[Pallete.flash]!,
-                            fillColor: MaterialStateProperty.resolveWith(
-                              (states) => pallete[Pallete.white]!,
-                            ),
-                            value: '',
-                            groupValue: 'a',
-                            onChanged: (value) {},
-                          ),
                           const SizedBox(width: 8),
                           Text(
                             widget.name,

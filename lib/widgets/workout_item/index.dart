@@ -8,10 +8,16 @@ class WorkoutItem extends StatefulWidget {
     super.key,
     required this.workout,
     required this.deleteWorkout,
+    required this.reserveDeleteingWorkout,
+    required this.groupValue,
+    required this.isEditingMode,
   });
 
   final MWorkoutItem workout;
   final void Function(String id) deleteWorkout;
+  final void Function() reserveDeleteingWorkout;
+  final String groupValue;
+  final bool isEditingMode;
 
   @override
   State<WorkoutItem> createState() => _WorkoutItemState();
@@ -23,7 +29,6 @@ class _WorkoutItemState extends State<WorkoutItem>
   late AnimationController _animationController;
   late Animation<double> _heightFactor;
   bool _isDisplayDeleteButton = false;
-  bool _isEditingMode = false;
 
   void _onTapHeader() {
     setState(() {
@@ -67,12 +72,16 @@ class _WorkoutItemState extends State<WorkoutItem>
       children: <Widget>[
         WorkoutItemHeader(
           isExpanded: _isExpanded,
+          id: widget.workout.id,
           name: widget.workout.name,
           totalSetCount: widget.workout.set.length,
           onTapHeader: _onTapHeader,
           isDisplayDeleteButton: _isDisplayDeleteButton,
           toggleDeleteBar: _toggleDeleteBar,
           deleteWorkout: () => widget.deleteWorkout(widget.workout.id),
+          groupValue: widget.groupValue,
+          reserveDeleteingWorkout: widget.reserveDeleteingWorkout,
+          isEditingMode: widget.isEditingMode,
         ),
         WorkoutItemContent(
           heightFactor: _heightFactor,

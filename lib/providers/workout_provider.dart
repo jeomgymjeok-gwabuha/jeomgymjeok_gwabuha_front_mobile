@@ -29,6 +29,14 @@ class WorkoutNotifier extends StateNotifier<Map<String, List<MWorkoutItem>>> {
           state[recordDate]!.where((element) => element.id != id).toList();
     }
   }
+
+  deleteWorkoutList(String recordDate, List<String> ids) {
+    if (state.containsKey(recordDate)) {
+      state[recordDate] = state[recordDate]!
+          .where((element) => !ids.contains(element.id))
+          .toList();
+    }
+  }
 }
 
 final workoutProvider =
