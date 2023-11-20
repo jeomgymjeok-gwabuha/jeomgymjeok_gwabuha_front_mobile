@@ -9,9 +9,11 @@ class WorkoutController extends StatefulWidget {
   const WorkoutController({
     super.key,
     required this.deleteWorkout,
+    required this.editWorkout,
   });
 
   final void Function() deleteWorkout;
+  final void Function() editWorkout;
 
   @override
   State<WorkoutController> createState() => _WorkoutControllerState();
@@ -141,7 +143,10 @@ class _WorkoutControllerState extends State<WorkoutController> {
                   child: SizedBox(
                     height: 56,
                     child: ElevatedButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        print('수정!');
+                        widget.editWorkout();
+                      },
                       style: ElevatedButton.styleFrom(
                         foregroundColor: pallete[Pallete.white],
                         backgroundColor: pallete[Pallete.deepNavy],

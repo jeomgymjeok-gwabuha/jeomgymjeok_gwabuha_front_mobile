@@ -13,11 +13,13 @@ class WorkoutList extends StatefulWidget {
     required this.list,
     required this.deleteWorkout,
     required this.deleteWorkoutList,
+    required this.editWorkout,
   });
 
   final List<MWorkoutItem> list;
   final void Function(String id) deleteWorkout;
   final void Function(List<String> ids) deleteWorkoutList;
+  final void Function(String id) editWorkout;
 
   @override
   State<WorkoutList> createState() => _WorkoutListState();
@@ -210,6 +212,7 @@ class _WorkoutListState extends State<WorkoutList> {
                 reserveDeleteingWorkout: () =>
                     _onReserveDeleteingWorkout(widget.list[index].id),
                 isEditingMode: _isEditingMode,
+                editWorkout: () => widget.editWorkout(widget.list[index].id),
               ),
               separatorBuilder: (context, index) => const SizedBox(
                 height: 2,

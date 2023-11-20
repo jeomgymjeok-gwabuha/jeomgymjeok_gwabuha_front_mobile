@@ -11,6 +11,7 @@ class WorkoutItem extends StatefulWidget {
     required this.reserveDeleteingWorkout,
     required this.groupValue,
     required this.isEditingMode,
+    required this.editWorkout,
   });
 
   final MWorkoutItem workout;
@@ -18,6 +19,7 @@ class WorkoutItem extends StatefulWidget {
   final void Function() reserveDeleteingWorkout;
   final String groupValue;
   final bool isEditingMode;
+  final void Function() editWorkout;
 
   @override
   State<WorkoutItem> createState() => _WorkoutItemState();
@@ -85,8 +87,11 @@ class _WorkoutItemState extends State<WorkoutItem>
         ),
         WorkoutItemContent(
           heightFactor: _heightFactor,
+          id: widget.workout.id,
+          name: widget.workout.name,
           set: widget.workout.set,
           deleteWorkout: () => widget.deleteWorkout(widget.workout.id),
+          editWorkout: widget.editWorkout,
         ),
       ],
     );

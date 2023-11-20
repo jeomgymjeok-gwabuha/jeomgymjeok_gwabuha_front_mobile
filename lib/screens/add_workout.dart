@@ -15,9 +15,11 @@ class AddWorkout extends StatefulWidget {
   const AddWorkout({
     super.key,
     required this.selectedDay,
+    this.workoutItem,
   });
 
   final DateTime selectedDay;
+  final MWorkoutItem? workoutItem;
 
   @override
   State<AddWorkout> createState() => _AddWorkoutState();
@@ -40,6 +42,19 @@ class _AddWorkoutState extends State<AddWorkout> {
   @override
   void initState() {
     super.initState();
+
+    if (widget.workoutItem != null) {
+      _nameController.text = widget.workoutItem!.name;
+      _setTableForm = widget.workoutItem!.set
+          .map(
+            (element) => MSetTableFormItem(
+              weightController:
+                  TextEditingController(text: '${element.weight}'),
+              countController: TextEditingController(text: '${element.count}'),
+            ),
+          )
+          .toList();
+    }
     _recordDate = widget.selectedDay;
   }
 

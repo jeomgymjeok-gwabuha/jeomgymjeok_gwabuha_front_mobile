@@ -10,11 +10,17 @@ class WorkoutItemContent extends StatelessWidget {
     required this.heightFactor,
     required this.set,
     required this.deleteWorkout,
+    required this.id,
+    required this.name,
+    required this.editWorkout,
   });
 
   final Animation<double> heightFactor;
   final List<MWorkoutSet> set;
   final void Function() deleteWorkout;
+  final String id;
+  final String name;
+  final void Function() editWorkout;
 
   @override
   Widget build(BuildContext context) {
@@ -75,6 +81,7 @@ class WorkoutItemContent extends StatelessWidget {
             .toList(),
         WorkoutController(
           deleteWorkout: deleteWorkout,
+          editWorkout: editWorkout,
         ),
       ]),
     );

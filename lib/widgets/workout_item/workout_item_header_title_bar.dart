@@ -43,6 +43,10 @@ class _WorkoutItemHeaderTitleBarState extends State<WorkoutItemHeaderTitleBar> {
         widget.isDisplayDeleteButton ? fullWidth - 80 : fullWidth;
 
     void _onHorizontalDragUpdate(DragUpdateDetails details) {
+      if (widget.isEditingMode) {
+        return;
+      }
+
       if (details.delta.dx > 0) {
         direction = 'right';
         return;

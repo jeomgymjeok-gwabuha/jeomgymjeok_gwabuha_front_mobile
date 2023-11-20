@@ -23,6 +23,22 @@ class WorkoutNotifier extends StateNotifier<Map<String, List<MWorkoutItem>>> {
     }
   }
 
+  replaceWorkout(String id, String prevRecordDate, String newRecordDate,
+      MWorkoutItem newWorkout) {
+    if (prevRecordDate != newRecordDate) {
+      deleteWorkout(prevRecordDate, id);
+      addWorkout(newRecordDate, newWorkout);
+    } else {
+      state[prevRecordDate] = state[prevRecordDate]!.map((element) {
+        if (element.id == id) {
+          return newWorkout;
+        }
+
+        return element;
+      }).toList();
+    }
+  }
+
   deleteWorkout(String recordDate, String id) {
     if (state.containsKey(recordDate)) {
       state[recordDate] =

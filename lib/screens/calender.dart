@@ -62,6 +62,36 @@ class _CalendarScreenState extends ConsumerState<CalendarScreen> {
     }
   }
 
+  void _editWorkout(String id) async {
+    Map<String, List<MWorkoutItem>> workout = ref.watch(workoutProvider);
+    List<MWorkoutItem>? list = workout[_selectedFormattedDay];
+    DateTime selectedDay = ref.watch(dateProvider);
+
+    if (list != null) {
+      MWorkoutItem _workoutItem =
+          list.firstWhere((element) => element.id == id);
+      Map<String, Object>? response =
+          await Navigator.of(context).push(MaterialPageRoute(
+        builder: (ctx) => AddWorkout(
+          selectedDay: selectedDay,
+          workoutItem: _workoutItem,
+        ),
+      ));
+
+      if (response != null) {
+        final recordDate = response['recordDate'] as String;
+        final newWorkoutItem = response['newWorkoutItem'] as MWorkoutItem;
+
+        print(_selectedFormattedDay == recordDate);
+
+        setState(() {
+          ref.read(workoutProvider.notifier).replaceWorkout(
+              id, _selectedFormattedDay, recordDate, newWorkoutItem);
+        });
+      }
+    }
+  }
+
   void _deleteWorkout(String id) {
     DateTime _selectedDay = ref.watch(dateProvider);
     final recordDate = DateFormat('yyyy.MM.dd').format(_selectedDay);
@@ -102,6 +132,7 @@ class _CalendarScreenState extends ConsumerState<CalendarScreen> {
                     list: _workout[_selectedFormattedDay] ?? [],
                     deleteWorkout: _deleteWorkout,
                     deleteWorkoutList: _deleteWorkoutList,
+                    editWorkout: _editWorkout,
                   ),
                 ),
               ],
