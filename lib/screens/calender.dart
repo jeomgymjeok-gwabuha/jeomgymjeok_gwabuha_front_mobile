@@ -119,52 +119,60 @@ class _CalendarScreenState extends ConsumerState<CalendarScreen> {
     Map<String, List<MWorkoutItem>> _workout = ref.watch(workoutProvider);
     DateTime _selectedDay = ref.watch(dateProvider);
 
-    return SizedBox(
-      height: double.infinity,
-      child: Stack(
-        children: [
-          if (isSelectDate)
-            Column(
-              children: [
-                const SizedBox(height: 228),
-                Expanded(
-                  child: WorkoutList(
-                    list: _workout[_selectedFormattedDay] ?? [],
-                    deleteWorkout: _deleteWorkout,
-                    deleteWorkoutList: _deleteWorkoutList,
-                    editWorkout: _editWorkout,
-                  ),
-                ),
-              ],
-            ),
-          CalendarSection(
-            selectedDay: _selectedDay,
-            calendarFormat: _calendarFormat,
-            selectDay: _selectDay,
-            changeYear: _changeYear,
-            onNextMonth: _onNextMonth,
-            onPrevMonth: _onPrevMonth,
-          ),
-          if (isSelectDate)
-            Positioned(
-                bottom: 16,
-                right: 16,
-                child: Container(
-                  width: 48,
-                  height: 48,
-                  decoration: BoxDecoration(
-                    color: pallete[Pallete.deepNavy],
-                    borderRadius: BorderRadius.circular(24),
-                  ),
-                  child: IconButton(
-                    onPressed: () => _addNewWorkout(_selectedDay),
-                    icon: SvgPicture.asset(
-                      'assets/icons/union.svg',
+    return Scaffold(
+        appBar: AppBar(
+          toolbarHeight: 56,
+          centerTitle: true,
+          backgroundColor: pallete[Pallete.deepNavy],
+          title: Image.asset('assets/images/appbar_logo.png'),
+          elevation: 0,
+        ),
+        body: SizedBox(
+          height: double.infinity,
+          child: Stack(
+            children: [
+              if (isSelectDate)
+                Column(
+                  children: [
+                    const SizedBox(height: 228),
+                    Expanded(
+                      child: WorkoutList(
+                        list: _workout[_selectedFormattedDay] ?? [],
+                        deleteWorkout: _deleteWorkout,
+                        deleteWorkoutList: _deleteWorkoutList,
+                        editWorkout: _editWorkout,
+                      ),
                     ),
-                  ),
-                ))
-        ],
-      ),
-    );
+                  ],
+                ),
+              CalendarSection(
+                selectedDay: _selectedDay,
+                calendarFormat: _calendarFormat,
+                selectDay: _selectDay,
+                changeYear: _changeYear,
+                onNextMonth: _onNextMonth,
+                onPrevMonth: _onPrevMonth,
+              ),
+              if (isSelectDate)
+                Positioned(
+                    bottom: 16,
+                    right: 16,
+                    child: Container(
+                      width: 48,
+                      height: 48,
+                      decoration: BoxDecoration(
+                        color: pallete[Pallete.deepNavy],
+                        borderRadius: BorderRadius.circular(24),
+                      ),
+                      child: IconButton(
+                        onPressed: () => _addNewWorkout(_selectedDay),
+                        icon: SvgPicture.asset(
+                          'assets/icons/union.svg',
+                        ),
+                      ),
+                    ))
+            ],
+          ),
+        ));
   }
 }

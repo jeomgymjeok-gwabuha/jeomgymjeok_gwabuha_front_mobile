@@ -2,18 +2,26 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:go_router/go_router.dart';
 import 'package:jeomgymjeok_gwabuha/design/Pallete.dart';
 import 'package:jeomgymjeok_gwabuha/design/Types.dart';
 
 class BottomNavigation extends StatelessWidget {
   const BottomNavigation({
     super.key,
-    required this.onSelectPage,
+    required this.pages,
     required this.pageIndex,
   });
 
-  final void Function(int index) onSelectPage;
+  final List<String> pages;
   final int pageIndex;
+
+  void _selectPage(BuildContext context, int index) {
+    final GoRouter route = GoRouter.of(context);
+    final page = pages[index];
+
+    route.pushReplacement(page);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -21,7 +29,7 @@ class BottomNavigation extends StatelessWidget {
       height: Platform.isIOS ? 120 : 80,
       child: BottomNavigationBar(
         backgroundColor: pallete[Pallete.deepNavy],
-        onTap: onSelectPage,
+        onTap: (index) => _selectPage(context, index),
         currentIndex: pageIndex,
         selectedItemColor: pallete[Pallete.flash],
         unselectedItemColor: pallete[Pallete.white],
